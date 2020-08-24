@@ -1,0 +1,264 @@
+(package-initialize)
+
+
+(org-babel-load-file (expand-file-name "~/.emacs.d/config.org"))
+
+
+
+;; ;; --------------------------------------------------
+;; ;; HOW TO LOAD CUSTOM PACKAGES
+;; ;; tell emacs where your personal elisp lib directory is
+(add-to-list `load-path "~/.emacs.d/lisp/")
+;; ;; load the packag named xyz
+(load "stm-mode") ;best not to include ending ".el" or ".elc"
+;; ;; --------------------------------------------------
+
+
+
+;; --------------------------------------------------
+;; stop showing the welcome screen
+;; --------------------------------------------------
+
+
+;; --------------------------------------------------
+;; deactivate bell
+;; --------------------------------------------------
+(setq visible-bell 1)
+
+;; --------------------------------------------------
+;; make sure line numbers appear in all text editing buffers
+;; --------------------------------------------------
+(global-linum-mode t)
+
+;; --------------------------------------------------
+;; setup starting frame dimensions
+;; --------------------------------------------------
+(setq initial-frame-alist '(
+            (top . 40) (left . 100)
+            (width . 128) (height . 50)
+            )
+      )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ELIXIR SETTINGS                                           ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; require alchemist on start-up for elixir
+(add-to-list 'load-path "~/.emacs.d/vendor/alchemist.el/")
+(require 'alchemist)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ERLANG SETTINGS                                        ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; --------------------------------------------------
+;; setup erlang mode
+;; --------------------------------------------------
+;; ;; add the location of the elisp files to the load-path
+;; (setq load-path (cons  "/usr/lib/erlang/lib/tools-2.6.13/emacs"
+;;          load-path))
+;; ;; set the location of the man page hierarchy
+;; (setq erlang-root-dir "/usr/lib/erlang")
+;; ;; add the home of the erlang binaries to the exec-path
+;; (setq exec-path (cons "/usr/lib/bin" exec-path))
+;; ;; load and eval the erlang-start package to set up 
+;; ;; everything else 
+;; (require 'erlang-start)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; R SETTINGS                                                   ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; set R as program for ESS
+(setq inferior-ess-r-program "R")
+(add-hook 'ess-mode-hook
+          (lambda () 
+            (ess-toggle-underscore nil)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; JAVA SETTINGS:                                            ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(add-hook 'java-mode-hook (lambda ()
+			    (setq c-basic-offset 2
+				  tab-width 2
+				  indent-tabs-mode t)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; COMMON LISP SETTINGS                                                   ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;(load (expand-file-name "~/quicklisp/slime-helper.el"))
+;; Replace "sbcl" with the path to your implementation
+;;(setq inferior-lisp-program "sbcl")
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; EMACS EXTRA KEY BINDINGS                       ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; --------------------------------------------------
+;; full width comment line break
+;; --------------------------------------------------
+(defun comment-line-break (&optional arg)
+  "Add dashed line break comment"
+  (interactive "*P")
+  (comment-normalize-vars)
+  (if (and (not (region-active-p)) (not (looking-at "[ \t]*$")))
+      (comment-or-uncomment-region (line-beginning-position) (line-end-position))
+    (comment-dwim arg))
+  (insert-char ?- 50))
+  ;; (insert-char ? 20))
+(global-set-key (kbd "C-M-;") `comment-line-break)
+
+;; --------------------------------------------------
+;; full width comment box
+;; --------------------------------------------------
+(defun bjm-comment-box (b e)
+  "draw a box comment around the region but arrange for the region to extend to at least the fill column.
+place the point after the comment box."
+  (interactive "r")
+  (let ((e (copy-marker e t)))
+    (goto-char b)
+    (end-of-line)
+    (insert-char ? (- fill-column (current-column)))
+    (comment-box b e 1)
+    (goto-char e)
+    (set-marker e nil)))
+;; create comment box
+(global-set-key (kbd "C-c b b") `bjm-comment-box)
+
+;; --------------------------------------------------
+;; helper function used by move-text-* (below
+;; --------------------------------------------------
+(defun move-text-internal (arg)
+  (cond
+   ((and mark-active transient-mark-mode)
+    (if (> (point) (mark))
+        (exchange-point-and-mark))
+    (let ((column (current-column))
+          (text (delete-and-extract-region (point) (mark))))
+      (forward-line arg)
+      (move-to-column column t)
+      (set-mark (point))
+      (insert text)
+      (exchange-point-and-mark)
+      (setq deactivate-mark nil)))
+   (t
+    (let ((column (current-column)))
+      (beginning-of-line)
+      (when (or (> arg 0) (not (bobp)))
+        (forward-line)
+        (when (or (< arg 0) (not (eobp)))
+          (transpose-lines arg)
+          (when (and (eval-when-compile
+                       '(and (>= emacs-major-version 24)
+                             (>= emacs-minor-version 3)))
+                     (< arg 0))
+            (forward-line -1)))
+        (forward-line -1))
+      (move-to-column column t)))))
+
+;; --------------------------------------------------
+;; move line down
+;; --------------------------------------------------
+(defun move-text-down (arg)
+  "Move region (transient-mark-mode active) or current line
+  arg lines down."
+  (interactive "*p")
+  (move-text-internal arg))
+(global-set-key [M-S-down] 'move-text-down)
+
+;; --------------------------------------------------
+;; move line up
+;; --------------------------------------------------
+(defun move-text-up (arg)
+  "Move region (transient-mark-mode active) or current line
+  arg lines up."
+  (interactive "*p")
+  (move-text-internal (- arg)))
+(global-set-key [M-S-up] 'move-text-up)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; SIMTALK MODE                                              
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; setup files ending in ".stm" to open in mystm-mode
+(add-to-list 'auto-mode-alist '("\\.stm\\'" . mystm-mode))
+(when (fboundp 'mystm-mode)
+
+  (defun my-insert-tab-char ()
+    "Insert a tab char. (ASCII 9, \t)"
+    (interactive)
+    (insert "\t"))
+
+  (defun my-tab-config ()
+    ;; setup tab char behavior
+    (local-set-key (kbd "TAB") 'my-insert-tab-char)  
+    )
+  
+  (add-hook 'mystm-mode-hook 'my-tab-config)
+  )
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ORG MODE SETTINGS                                     
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Enable Org mode
+(require 'org)
+;; Make Org mode work with files ending in .org
+;; (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
+;; The above is the default in recent emacsen
+(define-key global-map "\C-cl" 'org-store-link)
+(define-key global-map "\C-ca" 'org-agenda)
+(setq org-log-done t)
+(add-hook 'org-mode-hook #'visual-line-mode) ;line wrap
+(setq org-hide-leading-stars t)
+
+;; set directories for org agenda
+(setq org-agenda-files (append
+			(file-expand-wildcards "~/org/*org")))
+
+
+;; make bullets seem nice
+;; --------------------------------------------------
+;; METHOD 1:
+;; (require 'org-bullets)
+;; (add-hook 'ord-mode-hook (lambda () (org-bullets-mode 1)))
+;; --------------------------------------------------
+
+;; --------------------------------------------------
+;; SETUP ORG MODE - EXPORT HTML
+;; --------------------------------------------------
+(setq org-html-htmlize-output-type 'css)
+
+;; --------------------------------------------------
+;; SETUP ORG MODE - TWITTER BOOTSTRAP
+;; --------------------------------------------------
+(require 'ox-twbs)
+
+;; --------------------------------------------------
+;; SETUP ORG MODE - EXPORT LATEX
+;; --------------------------------------------------
+(require 'ox-latex)
+(unless (boundp 'org-latex-classes)
+  (setq org-latex-classes nil))
+;; (add-to-list 'org-latex-classes
+;;              '("article"
+;;                "\\documentclass{article}"
+;;                ("\\section{%s}" . "\\section*{%s}")))
+(add-to-list 'org-latex-classes
+             '("article"
+               "\\documentclass{article}"
+               ("\\section{%s}" . "\\section*{%s}")
+               ("\\subsection{%s}" . "\\subsection*{%s}")
+               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+               ("\\paragraph{%s}" . "\\paragraph*{%s}")
+               ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+(add-to-list 'org-latex-classes
+             '("book"
+               "\\documentclass{book}"
+               ("\\part{%s}" . "\\part*{%s}")
+               ("\\chapter{%s}" . "\\chapter*{%s}")
+               ("\\section{%s}" . "\\section*{%s}")
+               ("\\subsection{%s}" . "\\subsection*{%s}")
+               ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
+             )
+(put 'downcase-region 'disabled nil)
