@@ -164,7 +164,47 @@ place the point after the comment box."
 (setq org-hide-leading-stars t)
 
 (setq org-agenda-files (append
-			(file-expand-wildcards "~/org/*org")))
+			(file-expand-wildcards "~/org/gtd/gtd.org")
+			(file-expand-wildcards "~/org/gtd/inbox.org")
+			(file-expand-wildcards "~/org/gtd/tickler.org")))
+
+(setq org-capture-templates '(("t" "Todo [inbox]" entry
+                               (file+headline "~/org/gtd/inbox.org" "Tasks")
+                               "* TODO %i%?")
+                              ("T" "Tickler" entry
+                               (file+headline "~/org/gtd/tickler.org" "Tickler")
+                               "* %i%? \n %U")))
+
+(setq org-refile-targets '(("~/org/gtd/gtd.org" :maxlevel . 3)
+			   ("~/org/gtd/someday.org" :level . 1)
+			   ("~/org/gtd/tickler.org" :maxlevel . 2)))
+
+(setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
+
+(setq org-agenda-custom-commands 
+      '(("w" "At Work" tags-todo "@work" ((org-agenda-overriding-header "Work")
+	  (org-agenda-skip-function #'my-org-agenda-skip-all-siblings-but-first)))
+	("h" "At Home" tags-todo "@home" ((org-agenda-overriding-header "Home")
+	  (org-agenda-skip-function #'my-org-agenda-skip-all-siblings-but-first)))
+	("r" "On the Road" tags-todo "@road" ((org-agenda-overriding-header "Road")
+	  (org-agenda-skip-function #'my-org-agenda-skip-all-siblings-but-first)))))
+
+;; HELPER FUNCTIONS
+(defun my-org-agenda-skip-all-siblings-but-first ()
+  "Skip all but the first non-done entry."
+  (let (should-skip-entry)
+    (unless (org-current-is-todo)
+      (setq should-skip-entry t))
+    (save-excursion
+      (while (and (not should-skip-entry) (org-goto-sibling t))
+	(when (org-current-is-todo)
+	  (setq should-skip-entry t))))
+    (when should-skip-entry
+      (or (outline-next-heading)
+	  (goto-char (point-max))))))
+
+(defun org-current-is-todo ()
+  (string= "TODO" (org-get-todo-state)))
 
 (setq org-html-htmlize-output-type 'css)
 
@@ -195,3 +235,7 @@ place the point after the comment box."
                ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
              )
 (put 'downcase-region 'disabled nil)
+
+(global-set-key (kbd "C-c l") 'org-store-link)
+(global-set-key (kbd "C-c a") 'org-agenda)
+(global-set-key (kbd "C-c c") 'org-capture)

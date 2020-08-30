@@ -216,10 +216,58 @@ place the point after the comment box."
 (add-hook 'org-mode-hook #'visual-line-mode) ;line wrap
 (setq org-hide-leading-stars t)
 #+END_SRC
-** set directories for ogg agenda
+** set directories for org agenda
 #+BEGIN_SRC emacs-lisp
 (setq org-agenda-files (append
-			(file-expand-wildcards "~/org/*org")))
+			(file-expand-wildcards "~/org/gtd/gtd.org")
+			(file-expand-wildcards "~/org/gtd/inbox.org")
+			(file-expand-wildcards "~/org/gtd/tickler.org")))
+#+END_SRC
+** setup org capture templates for gtd
+#+BEGIN_SRC emacs-lisp
+(setq org-capture-templates '(("t" "Todo [inbox]" entry
+                               (file+headline "~/org/gtd/inbox.org" "Tasks")
+                               "* TODO %i%?")
+                              ("T" "Tickler" entry
+                               (file+headline "~/org/gtd/tickler.org" "Tickler")
+                               "* %i%? \n %U")))
+#+END_SRC
+** setup org refile targets
+#+BEGIN_SRC emacs-lisp
+(setq org-refile-targets '(("~/org/gtd/gtd.org" :maxlevel . 3)
+			   ("~/org/gtd/someday.org" :level . 1)
+			   ("~/org/gtd/tickler.org" :maxlevel . 2)))
+#+END_SRC
+** setup org todo keywords
+#+BEGIN_SRC emacs-lisp
+(setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
+#+END_SRC
+** setup custom org agenda commands
+#+BEGIN_SRC emacs-lisp
+  (setq org-agenda-custom-commands 
+	'(("w" "At Work" tags-todo "@work" ((org-agenda-overriding-header "Work")
+	    (org-agenda-skip-function #'my-org-agenda-skip-all-siblings-but-first)))
+	  ("h" "At Home" tags-todo "@home" ((org-agenda-overriding-header "Home")
+	    (org-agenda-skip-function #'my-org-agenda-skip-all-siblings-but-first)))
+	  ("r" "On the Road" tags-todo "@road" ((org-agenda-overriding-header "Road")
+	    (org-agenda-skip-function #'my-org-agenda-skip-all-siblings-but-first)))))
+
+  ;; HELPER FUNCTIONS
+  (defun my-org-agenda-skip-all-siblings-but-first ()
+    "Skip all but the first non-done entry."
+    (let (should-skip-entry)
+      (unless (org-current-is-todo)
+	(setq should-skip-entry t))
+      (save-excursion
+	(while (and (not should-skip-entry) (org-goto-sibling t))
+	  (when (org-current-is-todo)
+	    (setq should-skip-entry t))))
+      (when should-skip-entry
+	(or (outline-next-heading)
+	    (goto-char (point-max))))))
+
+  (defun org-current-is-todo ()
+    (string= "TODO" (org-get-todo-state)))
 #+END_SRC
 ** export html setup
 #+BEGIN_SRC emacs-lisp
@@ -256,4 +304,10 @@ place the point after the comment box."
                ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
              )
 (put 'downcase-region 'disabled nil)
+#+END_SRC
+** setup org-mode key bindings
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-c l") 'org-store-link)
+(global-set-key (kbd "C-c a") 'org-agenda)
+(global-set-key (kbd "C-c c") 'org-capture)
 #+END_SRC

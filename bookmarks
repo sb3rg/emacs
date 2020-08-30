@@ -2,9 +2,14 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("org-refile-last-stored"
- (filename . "~/org/today.org")
- (front-context-string . "** Brush teeth\nM")
- (rear-context-string . "\n** Go to work\n\n")
- (position . 84))
+(("org-capture-last-stored"
+ (filename . "~/org/gtd/inbox.org")
+ (front-context-string . "** TODO Download")
+ (rear-context-string . " can with a lid\n")
+ (position . 206))
+("org-refile-last-stored"
+ (filename . "~/org/gtd/gtd.org")
+ (front-context-string . "** Hang with Anu")
+ (rear-context-string . "* RELATIONSHIPS\n")
+ (position . 2535))
 )
