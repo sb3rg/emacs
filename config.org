@@ -124,6 +124,15 @@
   (add-hook 'mystm-mode-hook 'my-tab-config)
   )
 #+END_SRC
+** rust settings for racer
+#+BEGIN_SRC emacs-lisp
+(add-hook 'rust-mode-hook #'racer-mode)
+(add-hook 'racer-mode-hook #'eldoc-mode)
+(add-hook 'racer-mode-hook #'company-mode)
+(require 'rust-mode)
+(define-key rust-mode-map(kbd "TAB") #'company-indent-or-complete-common)
+(setq company-tooltip-align-annotations t)
+#+END_SRC
 * EXTRA KEY BINDINGS
 ** fill width comment line break
 #+BEGIN_SRC emacs-lisp
