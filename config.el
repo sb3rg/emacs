@@ -6,7 +6,7 @@
 
 (setq initial-frame-alist '(
             (top . 40) (left . 100)
-            (width . 128) (height . 50)
+            (width . 128) (height . 40)
             )
       )
 
