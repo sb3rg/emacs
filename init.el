@@ -15,7 +15,7 @@
    '(("gnu" . "http://elpa.gnu.org/packages/")
      ("" . "https://stable.melpa.org/packages/")))
  '(package-selected-packages
-   '(company racer cargo rust-mode ox-twbs htmlize yaml-mode ess poly-R r-autoyas python paredit geiser multi-term twilight-anti-bright-theme exwm alchemist))
+   '(plantuml-mode magit company racer cargo rust-mode ox-twbs htmlize yaml-mode ess poly-R r-autoyas python paredit geiser multi-term twilight-anti-bright-theme exwm alchemist))
  '(tool-bar-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

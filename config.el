@@ -224,23 +224,37 @@ place the point after the comment box."
 ;;              '("article"
 ;;                "\\documentclass{article}"
 ;;                ("\\section{%s}" . "\\section*{%s}")))
+;; --------------------------------------------------
+;; the original modifications
 (add-to-list 'org-latex-classes
-             '("article"
-               "\\documentclass{article}"
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-               ("\\paragraph{%s}" . "\\paragraph*{%s}")
-               ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+	     '("article"
+	       "\\documentclass{article}"
+	       ("\\section{%s}" . "\\section*{%s}")
+	       ("\\subsection{%s}" . "\\subsection*{%s}")
+	       ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+	       ("\\paragraph{%s}" . "\\paragraph*{%s}")
+	       ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+;; (add-to-list 'org-latex-classes
+;; 	     '("book"
+;; 	       "\\documentclass{book}"
+;; 	       ("\\part{%s}" . "\\part*{%s}")
+;; 	       ("\\chapter{%s}" . "\\chapter*{%s}")
+;; 	       ("\\section{%s}" . "\\section*{%s}")
+;; 	       ("\\subsection{%s}" . "\\subsection*{%s}")
+;; 	       ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))
+;; --------------------------------------------------
+;; (with-eval-after-load 'ox-latex
 (add-to-list 'org-latex-classes
-             '("book"
-               "\\documentclass{book}"
-               ("\\part{%s}" . "\\part*{%s}")
-               ("\\chapter{%s}" . "\\chapter*{%s}")
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
-             )
+	     '("org-plain-latex"
+	       "\\documentclass{article}
+	   [NO-DEFAULT-PACKAGES]
+	   [PACKAGES]
+	   [EXTRA]"
+	       ("\\section{%s}" . "\\section*{%s}")
+	       ("\\subsection{%s}" . "\\subsection*{%s}")
+	       ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+	       ("\\paragraph{%s}" . "\\paragraph*{%s}")
+	       ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 (put 'downcase-region 'disabled nil)
 
 (global-set-key (kbd "C-c l") 'org-store-link)

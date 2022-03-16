@@ -288,31 +288,45 @@ place the point after the comment box."
 #+END_SRC
 ** enable export of latex
 #+BEGIN_SRC emacs-lisp
-(require 'ox-latex)
-(unless (boundp 'org-latex-classes)
-  (setq org-latex-classes nil))
-;; (add-to-list 'org-latex-classes
-;;              '("article"
-;;                "\\documentclass{article}"
-;;                ("\\section{%s}" . "\\section*{%s}")))
-(add-to-list 'org-latex-classes
-             '("article"
-               "\\documentclass{article}"
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-               ("\\paragraph{%s}" . "\\paragraph*{%s}")
-               ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
-(add-to-list 'org-latex-classes
-             '("book"
-               "\\documentclass{book}"
-               ("\\part{%s}" . "\\part*{%s}")
-               ("\\chapter{%s}" . "\\chapter*{%s}")
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
-             )
-(put 'downcase-region 'disabled nil)
+  (require 'ox-latex)
+  (unless (boundp 'org-latex-classes)
+    (setq org-latex-classes nil))
+  ;; (add-to-list 'org-latex-classes
+  ;;              '("article"
+  ;;                "\\documentclass{article}"
+  ;;                ("\\section{%s}" . "\\section*{%s}")))
+  ;; --------------------------------------------------
+  ;; the original modifications
+  (add-to-list 'org-latex-classes
+	       '("article"
+		 "\\documentclass{article}"
+		 ("\\section{%s}" . "\\section*{%s}")
+		 ("\\subsection{%s}" . "\\subsection*{%s}")
+		 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+		 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+		 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+  ;; (add-to-list 'org-latex-classes
+  ;; 	     '("book"
+  ;; 	       "\\documentclass{book}"
+  ;; 	       ("\\part{%s}" . "\\part*{%s}")
+  ;; 	       ("\\chapter{%s}" . "\\chapter*{%s}")
+  ;; 	       ("\\section{%s}" . "\\section*{%s}")
+  ;; 	       ("\\subsection{%s}" . "\\subsection*{%s}")
+  ;; 	       ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))
+  ;; --------------------------------------------------
+  ;; (with-eval-after-load 'ox-latex
+  (add-to-list 'org-latex-classes
+	       '("org-plain-latex"
+		 "\\documentclass{article}
+	     [NO-DEFAULT-PACKAGES]
+	     [PACKAGES]
+	     [EXTRA]"
+		 ("\\section{%s}" . "\\section*{%s}")
+		 ("\\subsection{%s}" . "\\subsection*{%s}")
+		 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+		 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+		 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+  (put 'downcase-region 'disabled nil)
 #+END_SRC
 ** setup org-mode key bindings
 #+BEGIN_SRC emacs-lisp
