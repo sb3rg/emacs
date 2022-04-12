@@ -10,6 +10,26 @@
             )
       )
 
+(use-package vertico
+  :ensure t
+  :custom
+  (vertico-cycle t)
+  :init
+  (vertico-mode))
+
+(use-package savehist
+  :init
+  (savehist-mode))
+
+(use-package marginalia
+  :after vertico
+  :ensure t
+  :custom
+  (marginalia-annotators
+   '(marginalia-annotators-heavy marginalia-annotators-light nil))
+  :init
+  (marginalia-mode))
+
 ;; --------------------------------------------------
 ;; Setup custom variables
 ;; --------------------------------------------------
@@ -169,6 +189,8 @@ place the point after the comment box."
 (setq org-log-done t)
 (add-hook 'org-mode-hook #'visual-line-mode) ;line wrap
 (setq org-hide-leading-stars t)
+;; source code tab works on native language within src block
+(setq org-src-tab-acts-natively t)
 
 (setq org-agenda-files (append
 			(file-expand-wildcards "~/org/gtd/gtd.org")
@@ -260,3 +282,62 @@ place the point after the comment box."
 (global-set-key (kbd "C-c l") 'org-store-link)
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
+
+(setq plantuml-default-exec-mode 'jar)
+(setq plantuml-jar-path "~/org/lib/plantuml-1.2022.2.jar")
+;; fix problem with autoindenting
+(setq org-adapt-indentation nil)
+;; (setq org-plantuml-jar-path
+(setq org-plantuml-jar-path (expand-file-name "~/org/lib/plantuml-1.2022.2.jar"))
+;; enable plantuml-mode for PLANTUML files
+(add-to-list 'org-src-lang-modes '("plantuml" . plantuml))
+(add-to-list 'auto-mode-alist '("\\.plantuml\\'" . plantuml-mode))
+
+(with-eval-after-load 'org
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '(;; other Babel languages
+     (plantuml . t))))
+
+(require 'ox-reveal)
+;; (use-package ox-reveal)
+
+(require 'simple-httpd)
+
+;; dependency for org-roam
+(use-package emacsql-sqlite3)
+
+;; setup
+(use-package org-roam
+  :ensure t
+  :init
+  (setq org-roam-v2-ack t)
+  :custom
+  (org-roam-directory (file-truename "~/org-roam"))
+  (org-roam-completion-everywhere t)
+  ;; -- begin capture templates --
+  (org-roam-capture-templates
+   '(("d" "default" plain
+      "\n \n%?"
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+      :unnarrowed t)
+     ("b" "book notes" plain
+      "\n \n* Source\n \nAuthor: %^{Author}\nTitle: ${title}\nYear: %^{Year}\n \n* Summary\n \n%?"
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+      :unnarrowed t)
+     ("l" "programming language" plain
+      "\n \n* Characteristics\n \n- Family: %?\n-Inspired by: \n \n* Reference:\n \n"
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+      :unnarrowed t)
+     ("p" "project" plain
+      "\n \n* Goals\n \n* Tasks\n \n** TODO Add Initial tasks\n \n* Dates\n \n"
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: Project")
+      :unnarrowed t)))
+  ;; -- end capture tempaltes --
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+	 ("C-c n f" . org-roam-node-find)
+	 ("C-c n i" . org-roam-node-insert)
+	 :map org-mode-map
+	 ("C-M-i" . completion-at-point))
+  :config
+  (org-roam-setup))

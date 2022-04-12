@@ -1,12 +1,12 @@
-;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8-emacs -*- 
+;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8-emacs -*-
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
 (("org-capture-last-stored"
- (filename . "~/org/gtd/inbox.org")
- (front-context-string . "** TODO Experime")
- (rear-context-string . "data management\n")
- (position . 190))
+ (filename . "~/org-roam/20220412130527-control_systems_engineering.org")
+ (front-context-string . "\n* Source\nAuthor")
+ (rear-context-string . "ems_Engineering\n")
+ (position . 105))
 ("org-refile-last-stored"
  (filename . "~/org/gtd/gtd.org")
  (front-context-string . "*** TODO Experim")
