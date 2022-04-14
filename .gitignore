@@ -1,3 +1,7 @@
 auto-save-list
 org-roam.db
 elpa
+eln-cache
+history
+transient
+abbrev-defs
