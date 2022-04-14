@@ -1,116 +1,21 @@
 (package-initialize)
-(unless (package-installed-p 'use-package)
-  (package-install 'use-package))
-(require 'use-package)
 (org-babel-load-file (expand-file-name "~/.emacs.d/config.org"))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-faces-vector
-   [default default default italic underline success warning error])
- '(ansi-color-names-vector
-   ["#14191f" "#d15120" "#81af34" "#deae3e" "#7e9fc9" "#a878b5" "#7e9fc9" "#dcdddd"])
- '(ansi-term-color-vector
-   [unspecified "#14191f" "#d15120" "#81af34" "#deae3e" "#7e9fc9" "#a878b5" "#7e9fc9" "#dcdddd"])
  '(blink-cursor-mode nil)
- '(company-quickhelp-color-background "#4F4F4F")
- '(company-quickhelp-color-foreground "#DCDCCC")
+ '(custom-enabled-themes '(gruvbox-dark-medium))
  '(custom-safe-themes
-   '("2b9dc43b786e36f68a9fd4b36dd050509a0e32fe3b0a803310661edb7402b8b6" "3c68f48ea735abe65899f489271d11cbebbe87da7483acf9935ea4502efd0117" "b25040da50ef56b81165676fdf1aecab6eb2c928fac8a1861c5e7295d2a8d4dd" "95db78d85e3c0e735da28af774dfa59308db832f84b8a2287586f5b4f21a7a5b" "e6d83e70d2955e374e821e6785cd661ec363091edf56a463d0018dc49fbc92dd" default))
- '(fci-rule-character-color "#192028")
- '(fci-rule-color "#192028")
- '(marginalia-annotators
-   '(marginalia-annotators-heavy marginalia-annotators-light nil) t)
+   '("3c68f48ea735abe65899f489271d11cbebbe87da7483acf9935ea4502efd0117" "b25040da50ef56b81165676fdf1aecab6eb2c928fac8a1861c5e7295d2a8d4dd" "95db78d85e3c0e735da28af774dfa59308db832f84b8a2287586f5b4f21a7a5b" "e6d83e70d2955e374e821e6785cd661ec363091edf56a463d0018dc49fbc92dd" default))
  '(menu-bar-mode nil)
- '(nrepl-message-colors
-   '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
- '(org-roam-capture-templates
-   '(("d" "default" plain "
- 
-%?" :if-new
-(file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}
-")
-:unnarrowed t)
-     ("b" "book notes" plain "
- 
-* Source
- 
-Author: %^{Author}
-Title: ${title}
-Year: %^{Year}
- 
-* Summary
- 
-%?" :if-new
-(file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}
-")
-:unnarrowed t)
-     ("l" "programming language" plain "
- 
-* Characteristics
- 
-- Family: %?
--Inspired by: 
- 
-* Reference:
- 
-" :if-new
-(file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}
-")
-:unnarrowed t)
-     ("p" "project" plain "
- 
-* Goals
- 
-* Tasks
- 
-** TODO Add Initial tasks
- 
-* Dates
- 
-" :if-new
-(file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}
-#+filetags: Project")
-:unnarrowed t)) t)
- '(org-roam-completion-everywhere t t)
- '(org-roam-dailies-capture-templates
-   '(("d" "default" entry
-      (file "~/org-roam/templateS/DailyDefault.org")
-      :if-new
-      (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>
-"))) t)
- '(org-roam-directory "c:/msys64/home/SeanBergstedt/org-roam" t)
  '(package-archives
    '(("gnu" . "http://elpa.gnu.org/packages/")
      ("" . "https://stable.melpa.org/packages/")))
  '(package-selected-packages
-   '(gruvbox-theme marginalia emacsql-sqlite3 org-roam ox-twbs htmlize yaml-mode ess poly-R r-autoyas python paredit geiser multi-term exwm alchemist))
- '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
- '(tool-bar-mode nil)
- '(vc-annotate-background "#2B2B2B")
- '(vc-annotate-color-map
-   '((20 . "#BC8383")
-     (40 . "#CC9393")
-     (60 . "#DFAF8F")
-     (80 . "#D0BF8F")
-     (100 . "#E0CF9F")
-     (120 . "#F0DFAF")
-     (140 . "#5F7F5F")
-     (160 . "#7F9F7F")
-     (180 . "#8FB28F")
-     (200 . "#9FC59F")
-     (220 . "#AFD8AF")
-     (240 . "#BFEBBF")
-     (260 . "#93E0E3")
-     (280 . "#6CA0A3")
-     (300 . "#7CB8BB")
-     (320 . "#8CD0D3")
-     (340 . "#94BFF3")
-     (360 . "#DC8CC3")))
- '(vc-annotate-very-old-color "#DC8CC3")
- '(vertico-cycle t))
+   '(magit ox-twbs htmlize yaml-mode ess poly-R r-autoyas python paredit geiser multi-term gruvbox-theme exwm alchemist))
+ '(tool-bar-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

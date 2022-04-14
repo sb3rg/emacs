@@ -1,4 +1,4 @@
-;;; org-roam-autoloads.el --- automatically extracted autoloads
+;;; org-roam-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -9,7 +9,7 @@
 ;;;### (autoloads nil "org-roam" "org-roam.el" (0 0 0 0))
 ;;; Generated autoloads from org-roam.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "org-roam" '("org-roam-")))
+(register-definition-prefixes "org-roam" '("org-roam-"))
 
 ;;;***
 
@@ -39,7 +39,7 @@ The INFO, if provided, is passed along to the underlying `org-roam-capture-'.
 
 \(fn &optional GOTO KEYS &key FILTER-FN TEMPLATES INFO)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "org-roam-capture" '("org-roam-capture-")))
+(register-definition-prefixes "org-roam-capture" '("org-roam-capture-"))
 
 ;;;***
 
@@ -47,7 +47,7 @@ The INFO, if provided, is passed along to the underlying `org-roam-capture-'.
 ;;;;;;  0 0))
 ;;; Generated autoloads from org-roam-compat.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "org-roam-compat" '("org-roam--")))
+(register-definition-prefixes "org-roam-compat" '("org-roam--"))
 
 ;;;***
 
@@ -142,7 +142,7 @@ In this case, interactive selection will be bypassed.
 (autoload 'org-roam-dailies-find-directory "org-roam-dailies" "\
 Find and open `org-roam-dailies-directory'." t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "org-roam-dailies" '("org-roam-dailies-")))
+(register-definition-prefixes "org-roam-dailies" '("org-roam-dailies-"))
 
 ;;;***
 
@@ -172,10 +172,20 @@ buffers (that are Org-roam file visiting), keep track of the
 related changes, maintain cache consistency and incrementally
 update the currently active database.
 
-If called interactively, enable Org-Roam-Db-Autosync mode if ARG
-is positive, and disable it if ARG is zero or negative.  If
-called from Lisp, also enable the mode if ARG is omitted or nil,
-and toggle it if ARG is `toggle'; disable the mode otherwise.
+This is a minor mode.  If called interactively, toggle the
+`Org-Roam-Db-Autosync mode' mode.  If the prefix argument is
+positive, enable the mode, and if it is zero or negative, disable
+the mode.
+
+If called from Lisp, toggle the mode if ARG is `toggle'.  Enable
+the mode if ARG is nil, omitted, or is a positive number.
+Disable the mode if ARG is a negative number.
+
+To check whether the minor mode is enabled in the current buffer,
+evaluate `(default-value \\='org-roam-db-autosync-mode)'.
+
+The mode's hook is called both when the mode is enabled and when
+it is disabled.
 
 If you need to manually trigger resync of the currently active
 database, see `org-roam-db-sync' command.
@@ -185,7 +195,7 @@ database, see `org-roam-db-sync' command.
 (autoload 'org-roam-db-autosync-enable "org-roam-db" "\
 Activate `org-roam-db-autosync-mode'." nil nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "org-roam-db" '("emacsql-constraint" "org-roam-d")))
+(register-definition-prefixes "org-roam-db" '("emacsql-constraint" "org-roam-d"))
 
 ;;;***
 
@@ -202,7 +212,7 @@ ARG may be any of the following values:
 
 \(fn &optional ARG NODE)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "org-roam-graph" '("org-roam-")))
+(register-definition-prefixes "org-roam-graph" '("org-roam-"))
 
 ;;;***
 
@@ -227,7 +237,7 @@ that are excluded from identification in Org-roam as
 
 \(fn &rest DIRECTORIES)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "org-roam-id" '("org-roam-id-")))
+(register-definition-prefixes "org-roam-id" '("org-roam-id-"))
 
 ;;;***
 
@@ -241,7 +251,7 @@ Migrate all notes from to be compatible with Org-roam v2.
 2. Rebuild the cache.
 3. Replace all file links with ID links." t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "org-roam-migrate" '("org-roam-migrate-")))
+(register-definition-prefixes "org-roam-migrate" '("org-roam-migrate-"))
 
 ;;;***
 
@@ -259,7 +269,7 @@ In interactive calls prompt to select NODE, unless called with
 
 \(fn NODE)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "org-roam-mode" '("org-roam-")))
+(register-definition-prefixes "org-roam-mode" '("org-roam-"))
 
 ;;;***
 
@@ -311,7 +321,7 @@ and when nil is returned the node will be filtered out.
 
 \(fn &optional INITIAL-INPUT FILTER-FN)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "org-roam-node" '("org-roam-")))
+(register-definition-prefixes "org-roam-node" '("org-roam-"))
 
 ;;;***
 
@@ -319,7 +329,7 @@ and when nil is returned the node will be filtered out.
 ;;;;;;  0 0 0))
 ;;; Generated autoloads from org-roam-overlay.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "org-roam-overlay" '("org-roam-overlay-")))
+(register-definition-prefixes "org-roam-overlay" '("org-roam-overlay-"))
 
 ;;;***
 
@@ -327,7 +337,7 @@ and when nil is returned the node will be filtered out.
 ;;;;;;  (0 0 0 0))
 ;;; Generated autoloads from org-roam-protocol.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "org-roam-protocol" '("org-roam-")))
+(register-definition-prefixes "org-roam-protocol" '("org-roam-"))
 
 ;;;***
 
@@ -344,7 +354,7 @@ Interactively, or when MESSAGE is non-nil, show in the echo area.
 (autoload 'org-roam-diagnostics "org-roam-utils" "\
 Collect and print info for `org-roam' issues." t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "org-roam-utils" '("org-roam-")))
+(register-definition-prefixes "org-roam-utils" '("org-roam-"))
 
 ;;;***
 

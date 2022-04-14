@@ -1,12 +1,12 @@
-;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8-emacs -*-
+;;;; Emacs Bookmark Format Version 1;;;; -*- coding: utf-8-emacs; mode: lisp-data -*-
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
 (("org-capture-last-stored"
- (filename . "~/org-roam/Inbox.org")
- (front-context-string . "* Test inbox ent")
- (rear-context-string . "\n#+title: Inbox\n")
- (position . 83))
+ (filename . "~/org-roam/daily/2022-04-12.org")
+ (front-context-string . "* 11:52 PM: Foll")
+ (rear-context-string . "4-12 Tue 22:36]\n")
+ (position . 397))
 ("org-refile-last-stored"
  (filename . "~/org-roam/daily/2022-04-12.org")
  (front-context-string . "** DONE Test inb")

@@ -1,4 +1,4 @@
-;;; vertico-autoloads.el --- automatically extracted autoloads
+;;; vertico-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -22,14 +22,23 @@ or call the function `vertico-mode'.")
 (autoload 'vertico-mode "vertico" "\
 VERTical Interactive COmpletion.
 
-If called interactively, enable Vertico mode if ARG is positive,
-and disable it if ARG is zero or negative.  If called from Lisp,
-also enable the mode if ARG is omitted or nil, and toggle it if
-ARG is `toggle'; disable the mode otherwise.
+This is a minor mode.  If called interactively, toggle the
+`Vertico mode' mode.  If the prefix argument is positive, enable
+the mode, and if it is zero or negative, disable the mode.
+
+If called from Lisp, toggle the mode if ARG is `toggle'.  Enable
+the mode if ARG is nil, omitted, or is a positive number.
+Disable the mode if ARG is a negative number.
+
+To check whether the minor mode is enabled in the current buffer,
+evaluate `(default-value \\='vertico-mode)'.
+
+The mode's hook is called both when the mode is enabled and when
+it is disabled.
 
 \(fn &optional ARG)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "vertico" '("vertico-")))
+(register-definition-prefixes "vertico" '("vertico-"))
 
 ;;;***
 
@@ -50,14 +59,23 @@ or call the function `vertico-buffer-mode'.")
 (autoload 'vertico-buffer-mode "vertico-buffer" "\
 Display Vertico in a buffer instead of the minibuffer.
 
-If called interactively, enable Vertico-Buffer mode if ARG is
-positive, and disable it if ARG is zero or negative.  If called
-from Lisp, also enable the mode if ARG is omitted or nil, and
-toggle it if ARG is `toggle'; disable the mode otherwise.
+This is a minor mode.  If called interactively, toggle the
+`Vertico-Buffer mode' mode.  If the prefix argument is positive,
+enable the mode, and if it is zero or negative, disable the mode.
+
+If called from Lisp, toggle the mode if ARG is `toggle'.  Enable
+the mode if ARG is nil, omitted, or is a positive number.
+Disable the mode if ARG is a negative number.
+
+To check whether the minor mode is enabled in the current buffer,
+evaluate `(default-value \\='vertico-buffer-mode)'.
+
+The mode's hook is called both when the mode is enabled and when
+it is disabled.
 
 \(fn &optional ARG)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "vertico-buffer" '("vertico-buffer-")))
+(register-definition-prefixes "vertico-buffer" '("vertico-buffer-"))
 
 ;;;***
 
@@ -86,7 +104,7 @@ Delete N directories or words before point.
 (autoload 'vertico-directory-tidy "vertico-directory" "\
 Tidy shadowed file name, see `rfn-eshadow-overlay'." nil nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "vertico-directory" '("vertico-directory--completing-file-p")))
+(register-definition-prefixes "vertico-directory" '("vertico-directory--completing-file-p"))
 
 ;;;***
 
@@ -106,14 +124,23 @@ or call the function `vertico-flat-mode'.")
 (autoload 'vertico-flat-mode "vertico-flat" "\
 Flat, horizontal display for Vertico.
 
-If called interactively, enable Vertico-Flat mode if ARG is
-positive, and disable it if ARG is zero or negative.  If called
-from Lisp, also enable the mode if ARG is omitted or nil, and
-toggle it if ARG is `toggle'; disable the mode otherwise.
+This is a minor mode.  If called interactively, toggle the
+`Vertico-Flat mode' mode.  If the prefix argument is positive,
+enable the mode, and if it is zero or negative, disable the mode.
+
+If called from Lisp, toggle the mode if ARG is `toggle'.  Enable
+the mode if ARG is nil, omitted, or is a positive number.
+Disable the mode if ARG is a negative number.
+
+To check whether the minor mode is enabled in the current buffer,
+evaluate `(default-value \\='vertico-flat-mode)'.
+
+The mode's hook is called both when the mode is enabled and when
+it is disabled.
 
 \(fn &optional ARG)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "vertico-flat" '("vertico-flat-")))
+(register-definition-prefixes "vertico-flat" '("vertico-flat-"))
 
 ;;;***
 
@@ -133,14 +160,23 @@ or call the function `vertico-grid-mode'.")
 (autoload 'vertico-grid-mode "vertico-grid" "\
 Grid display for Vertico.
 
-If called interactively, enable Vertico-Grid mode if ARG is
-positive, and disable it if ARG is zero or negative.  If called
-from Lisp, also enable the mode if ARG is omitted or nil, and
-toggle it if ARG is `toggle'; disable the mode otherwise.
+This is a minor mode.  If called interactively, toggle the
+`Vertico-Grid mode' mode.  If the prefix argument is positive,
+enable the mode, and if it is zero or negative, disable the mode.
+
+If called from Lisp, toggle the mode if ARG is `toggle'.  Enable
+the mode if ARG is nil, omitted, or is a positive number.
+Disable the mode if ARG is a negative number.
+
+To check whether the minor mode is enabled in the current buffer,
+evaluate `(default-value \\='vertico-grid-mode)'.
+
+The mode's hook is called both when the mode is enabled and when
+it is disabled.
 
 \(fn &optional ARG)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "vertico-grid" '("vertico-grid-")))
+(register-definition-prefixes "vertico-grid" '("vertico-grid-"))
 
 ;;;***
 
@@ -161,14 +197,23 @@ or call the function `vertico-indexed-mode'.")
 (autoload 'vertico-indexed-mode "vertico-indexed" "\
 Prefix candidates with indices.
 
-If called interactively, enable Vertico-Indexed mode if ARG is
-positive, and disable it if ARG is zero or negative.  If called
-from Lisp, also enable the mode if ARG is omitted or nil, and
-toggle it if ARG is `toggle'; disable the mode otherwise.
+This is a minor mode.  If called interactively, toggle the
+`Vertico-Indexed mode' mode.  If the prefix argument is positive,
+enable the mode, and if it is zero or negative, disable the mode.
+
+If called from Lisp, toggle the mode if ARG is `toggle'.  Enable
+the mode if ARG is nil, omitted, or is a positive number.
+Disable the mode if ARG is a negative number.
+
+To check whether the minor mode is enabled in the current buffer,
+evaluate `(default-value \\='vertico-indexed-mode)'.
+
+The mode's hook is called both when the mode is enabled and when
+it is disabled.
 
 \(fn &optional ARG)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "vertico-indexed" '("vertico-indexed--")))
+(register-definition-prefixes "vertico-indexed" '("vertico-indexed--"))
 
 ;;;***
 
@@ -188,14 +233,23 @@ or call the function `vertico-mouse-mode'.")
 (autoload 'vertico-mouse-mode "vertico-mouse" "\
 Mouse support for Vertico.
 
-If called interactively, enable Vertico-Mouse mode if ARG is
-positive, and disable it if ARG is zero or negative.  If called
-from Lisp, also enable the mode if ARG is omitted or nil, and
-toggle it if ARG is `toggle'; disable the mode otherwise.
+This is a minor mode.  If called interactively, toggle the
+`Vertico-Mouse mode' mode.  If the prefix argument is positive,
+enable the mode, and if it is zero or negative, disable the mode.
+
+If called from Lisp, toggle the mode if ARG is `toggle'.  Enable
+the mode if ARG is nil, omitted, or is a positive number.
+Disable the mode if ARG is a negative number.
+
+To check whether the minor mode is enabled in the current buffer,
+evaluate `(default-value \\='vertico-mouse-mode)'.
+
+The mode's hook is called both when the mode is enabled and when
+it is disabled.
 
 \(fn &optional ARG)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "vertico-mouse" '("vertico-mouse--")))
+(register-definition-prefixes "vertico-mouse" '("vertico-mouse--"))
 
 ;;;***
 
@@ -216,14 +270,24 @@ or call the function `vertico-multiform-mode'.")
 (autoload 'vertico-multiform-mode "vertico-multiform" "\
 Configure Vertico in various forms per command.
 
-If called interactively, enable Vertico-Multiform mode if ARG is
-positive, and disable it if ARG is zero or negative.  If called
-from Lisp, also enable the mode if ARG is omitted or nil, and
-toggle it if ARG is `toggle'; disable the mode otherwise.
+This is a minor mode.  If called interactively, toggle the
+`Vertico-Multiform mode' mode.  If the prefix argument is
+positive, enable the mode, and if it is zero or negative, disable
+the mode.
+
+If called from Lisp, toggle the mode if ARG is `toggle'.  Enable
+the mode if ARG is nil, omitted, or is a positive number.
+Disable the mode if ARG is a negative number.
+
+To check whether the minor mode is enabled in the current buffer,
+evaluate `(default-value \\='vertico-multiform-mode)'.
+
+The mode's hook is called both when the mode is enabled and when
+it is disabled.
 
 \(fn &optional ARG)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "vertico-multiform" '("vertico-multiform-")))
+(register-definition-prefixes "vertico-multiform" '("vertico-multiform-"))
 
 ;;;***
 
@@ -239,7 +303,7 @@ Exit with candidate using quick keys." t nil)
 (autoload 'vertico-quick-insert "vertico-quick" "\
 Insert candidate using quick keys." t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "vertico-quick" '("vertico-quick")))
+(register-definition-prefixes "vertico-quick" '("vertico-quick"))
 
 ;;;***
 
@@ -265,7 +329,7 @@ If prefix ARG is non-nil, offer completion menu to select from session history.
 
 \(fn &optional ARG)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "vertico-repeat" '("vertico-repeat-")))
+(register-definition-prefixes "vertico-repeat" '("vertico-repeat-"))
 
 ;;;***
 
@@ -286,14 +350,23 @@ or call the function `vertico-reverse-mode'.")
 (autoload 'vertico-reverse-mode "vertico-reverse" "\
 Reverse the Vertico display.
 
-If called interactively, enable Vertico-Reverse mode if ARG is
-positive, and disable it if ARG is zero or negative.  If called
-from Lisp, also enable the mode if ARG is omitted or nil, and
-toggle it if ARG is `toggle'; disable the mode otherwise.
+This is a minor mode.  If called interactively, toggle the
+`Vertico-Reverse mode' mode.  If the prefix argument is positive,
+enable the mode, and if it is zero or negative, disable the mode.
+
+If called from Lisp, toggle the mode if ARG is `toggle'.  Enable
+the mode if ARG is nil, omitted, or is a positive number.
+Disable the mode if ARG is a negative number.
+
+To check whether the minor mode is enabled in the current buffer,
+evaluate `(default-value \\='vertico-reverse-mode)'.
+
+The mode's hook is called both when the mode is enabled and when
+it is disabled.
 
 \(fn &optional ARG)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "vertico-reverse" '("vertico-reverse-")))
+(register-definition-prefixes "vertico-reverse" '("vertico-reverse-"))
 
 ;;;***
 
@@ -314,14 +387,24 @@ or call the function `vertico-unobtrusive-mode'.")
 (autoload 'vertico-unobtrusive-mode "vertico-unobtrusive" "\
 Unobtrusive display for Vertico.
 
-If called interactively, enable Vertico-Unobtrusive mode if ARG
-is positive, and disable it if ARG is zero or negative.  If
-called from Lisp, also enable the mode if ARG is omitted or nil,
-and toggle it if ARG is `toggle'; disable the mode otherwise.
+This is a minor mode.  If called interactively, toggle the
+`Vertico-Unobtrusive mode' mode.  If the prefix argument is
+positive, enable the mode, and if it is zero or negative, disable
+the mode.
+
+If called from Lisp, toggle the mode if ARG is `toggle'.  Enable
+the mode if ARG is nil, omitted, or is a positive number.
+Disable the mode if ARG is a negative number.
+
+To check whether the minor mode is enabled in the current buffer,
+evaluate `(default-value \\='vertico-unobtrusive-mode)'.
+
+The mode's hook is called both when the mode is enabled and when
+it is disabled.
 
 \(fn &optional ARG)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "vertico-unobtrusive" '("vertico-unobtrusive--orig-count")))
+(register-definition-prefixes "vertico-unobtrusive" '("vertico-unobtrusive--orig-count"))
 
 ;;;***
 
