@@ -59,6 +59,10 @@
    ;; '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 105 :width normal :foundry "outline" :family "DejaVu Sans Mono")))))
    '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 105 :width normal :foundry "outline" :family nil)))))
 
+(use-package helpful
+  :ensure t
+  :bind (("C-h F" . helpful-function)))
+
 (use-package magit
   :ensure t)
 
@@ -353,9 +357,9 @@ place the point after the comment box."
 (use-package emacsql-sqlite3
   :ensure t)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; BEGIN HELPER FUNCTIONS                                               ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; -*- lexical-binding: t; -*-
 (defun org-roam-node-insert-immediate (arg &rest args)
   (interactive "P")
@@ -372,9 +376,26 @@ place the point after the comment box."
   (org-roam-capture- :node (org-roam-node-create)
 		     :templates '(("i" "inbox" plain "* %?"
 				   :if-new (file+head "Inbox.org" "#+title: Inbox\n")))))
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; --------------------------------------------------
+;; build org agenda from org-roam notes
+;; --------------------------------------------------
+(defun my/org-roam-filter-by-tag (tag-name)
+  (lambda (node)
+    (member tag-name (org-roam-node-tags node))))
+
+(defun my/org-roam-list-notes-by-tag (tag-name)
+  (mapcar #'org-roam-node-file
+	  (seq-filter
+	   (my/org-roam-filter-by-tag tag-name)
+	   (org-roam-node-list))))
+
+(defun my/org-roam-refresh-agenda-list ()
+  (interactive)
+  (setq org-agenda-files (my/org-roam-list-notes-by-tag "Project")))
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; END HELPER FUNCTIONS                                                 ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; org-roam setup
 (use-package org-roam
@@ -409,7 +430,11 @@ place the point after the comment box."
 	 ("C-c n b" . my/org-roam-capture-inbox)
 	 :map org-mode-map
 	 ("C-M-i" . completion-at-point))
+  :bind-keymap
+  ("C-c n d" . org-roam-dailies-map)
   :config
-  (org-roam-setup))
-;; (org-roam-db-autosync-mode))
+  (require 'org-roam-dailies)		;ensure the keymap is available
+  ;; (org-roam-setup)
+  (org-roam-db-autosync-mode)
+  (my/org-roam-refresh-agenda-list))   ;; Build the agenda list the first time for the session)
 ;; --- END HELPER FUNCTIONS ---
