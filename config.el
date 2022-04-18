@@ -62,6 +62,38 @@
 (use-package magit
   :ensure t)
 
+;; (use-package company
+;;   :ensure t)
+
+;; (use-package flycheck
+;;   :ensure t
+;;   :init (global-flycheck-mode))
+;; (use-package flycheck-rust
+;;   :ensure t)
+
+;; (use-package lsp-mode
+;;   :ensure t
+;;   :commands (lsp lsp-deferred)
+;;   :init
+;;   (setq lsp-keymap-prefix "C-c l"))
+  ;; :config
+  ;; (lsp-enable-which-key-intergration t))
+
+;; --- NOT SURE HOW TO PROPERLY SET THIS UP SO COMMENTING OUT
+;; (use-package lsp-java
+;;   :ensure t
+;;   :init
+;;   (setq lsp-java-java-path "/c/Users/SeanBergstedt/jdk-16.0.2/bin/java.exe")
+;;   :config
+;;   (add-hook 'java-mode-hook #'lsp))
+
+;; (require 'simple-httpd)
+(use-package simple-httpd
+  :ensure t)
+
+(use-package websocket
+  :ensure t)
+
 (add-to-list `load-path "~/.emacs.d/lisp/")
 
 (load "stm-mode")
@@ -317,28 +349,67 @@ place the point after the comment box."
 ;; (use-package org-reveal
 ;;   :ensure t)
 
-;; (require 'simple-httpd)
-(use-package simple-httpd
-  :ensure t)
-
-;; dependency for org-roam
+;; dependencies for org-roam
 (use-package emacsql-sqlite3
   :ensure t)
-;; setup
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; BEGIN HELPER FUNCTIONS                                               ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; -*- lexical-binding: t; -*-
+(defun org-roam-node-insert-immediate (arg &rest args)
+  (interactive "P")
+  (let ((args (push arg args))
+	(org-roam-capture-templates (list (append (car org-roam-capture-templates)
+						  '(:immediate-finish t)))))
+    (apply #'org-roam-node-insert args)))
+
+;; --------------------------------------------------
+;; Keep an inbox of notes and tasks
+;; --------------------------------------------------
+(defun my/org-roam-capture-inbox ()
+  (interactive)
+  (org-roam-capture- :node (org-roam-node-create)
+		     :templates '(("i" "inbox" plain "* %?"
+				   :if-new (file+head "Inbox.org" "#+title: Inbox\n")))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; END HELPER FUNCTIONS                                                 ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; org-roam setup
 (use-package org-roam
   :ensure t
   :init
   (setq org-roam-v2-ack t)
+  ;; (setq org-roam-node-display-template "${directories:10} ${tags:10} ${title:100} ${backlinkscount:6}")
   :custom
   (org-roam-directory (file-truename "~/org-roam"))
   (org-roam-completion-everywhere t)
+  (org-roam-capture-templates
+   '(("t" "topic" plain
+      (file "~/org-roam/templates/Topic.org" )
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
+      :unnarrowed t)
+     ("u" "quote" plain
+      (file "~/org-roam/templates/QuoteTemplate.org")
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: Quote\n#+date: %U\n")
+      :unnarrowed t)
+     ("b" "book reference" plain
+      (file "~/org-roam/templates/BookNoteTemplate.org")
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: Reference Document\n#+date: %U\n")
+      :unnarrowed t)
+     ("p" "project" plain
+      (file "~/org-roam/templates/ProjectTemplate.org")
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: Project\n#+date: %U\n")
+      :unnarrowed t)))
   :bind (("C-c n l" . org-roam-buffer-toggle)
 	 ("C-c n f" . org-roam-node-find)
 	 ("C-c n i" . org-roam-node-insert)
+	 ("C-c n I" . org-roam-node-insert-immediate)
+	 ("C-c n b" . my/org-roam-capture-inbox)
 	 :map org-mode-map
 	 ("C-M-i" . completion-at-point))
   :config
-  (org-roam-db-autosync-mode))
-  ;; (org-roam-setup))
-;; (org-roam-db-autosync-mode)))
+  (org-roam-setup))
+;; (org-roam-db-autosync-mode))
 ;; --- END HELPER FUNCTIONS ---
