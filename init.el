@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (package-initialize)
 (org-babel-load-file (expand-file-name "~/.emacs.d/config.org"))
 (custom-set-variables
