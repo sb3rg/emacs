@@ -4,19 +4,19 @@
 
 * FRAME SETTINGS
 ** Stop showing the welcome screen
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (setq inhibit-startup-screen t)
 #+END_SRC
 ** Deactivate bell
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq visible-bell 1)
 #+END_SRC
 ** Make sure line numbers appear in all text editing buffers
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (global-linum-mode t)
 #+END_SRC
 ** Setup starting frame dimensions
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq initial-frame-alist '(
             (top . 40) (left . 100)
             (width . 128) (height . 40)
@@ -25,8 +25,9 @@
 #+END_SRC
 * CUSTOM VARIABLES & USE-PACKAGE
 ** setup custom variables
-#+BEGIN_SRC emacs-lisp
-  (load-theme 'gruvbox-dark-medium t) 	;don't place within custom variables (below)
+#+begin_src emacs-lisp
+  (when (require 'gruvbox-theme nil 'noerror)
+    (load-theme 'gruvbox-dark-medium t)) 	;don't place within custom variables (below)
   ;; --------------------------------------------------
   ;; Setup custom variables
   ;; --------------------------------------------------
@@ -51,6 +52,11 @@
       (ox-twbs htmlize yaml-mode ess poly-R r-autoyas python paredit geiser multi-term gruvbox-theme exwm alchemist))) ;twilight-anti-bright-theme
    '(tool-bar-mode nil))
 #+END_SRC
+** install theme
+#+begin_src emacs-lisp
+  (use-package gruvbox-theme
+    :ensure t)
+#+end_src
 ** setup vertico mode
 #+begin_src emacs-lisp
   (use-package vertico
@@ -80,7 +86,7 @@
 
 * CUSTOM UI SETTINGS
 ** customize font size and style
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (custom-set-faces
    ;; '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 105 :width normal :foundry "outline" :family "DejaVu Sans Mono")))))
    '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 105 :width normal :foundry "outline" :family nil)))))
@@ -94,8 +100,8 @@
 #+end_src
 ** setup magit
 #+begin_src emacs-lisp
-  (use-package magit
-    :ensure t)
+  ;; (use-package magit
+  ;;   :ensure t)
 #+end_src
 ** setup company (for text completion framework--inactive)
 #+begin_src emacs-lisp
@@ -144,23 +150,23 @@
 * CUSTOM PACKAGES
 ** SimTalk Mode
    Tell emacs where your persona elisp lib directory is located
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (add-to-list `load-path "~/.emacs.d/lisp/")
 #+END_SRC
    Best not to include ending ".el" or ".elc"
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (load "stm-mode")
 #+END_SRC
 * CUSTOM LANGUAGE SETTINGS
 ** elixir settings: require alchemist on start-up for elixir
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   ;; (add-to-list 'load-path "~/.emacs.d/vendor/alchemist.el/")
   (use-package alchemist
     :ensure t)
   ;; (require 'alchemist)
 #+END_SRC
 ** erlang settings:
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ;; ;; add the location of the elisp files to the load-path
 ;; (setq load-path (cons  "/usr/lib/erlang/lib/tools-2.6.13/emacs"
 ;;          load-path))
@@ -173,27 +179,27 @@
 ;; (require 'erlang-start)
 #+END_SRC
 ** R settings: set R as program for ess
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq inferior-ess-r-program "R")
 (add-hook 'ess-mode-hook
           (lambda () 
             (ess-toggle-underscore nil)))
 #+END_SRC
 ** java settings
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (add-hook 'java-mode-hook (lambda ()
 			    (setq c-basic-offset 2
 				  tab-width 2
 				  indent-tabs-mode t)))
 #+END_SRC
 ** common lisp settings: sbcl
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ;;(load (expand-file-name "~/quicklisp/slime-helper.el"))
 ;; Replace "sbcl" with the path to your implementation
 ;;(setq inferior-lisp-program "sbcl")
 #+END_SRC
 ** simtalk: setup files ending in ".stm" to open in mystm-mode
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (add-to-list 'auto-mode-alist '("\\.stm\\'" . mystm-mode))
 (when (fboundp 'mystm-mode)
 
@@ -211,7 +217,7 @@
   )
 #+END_SRC
 ** rust settings for racer
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (add-hook 'rust-mode-hook #'racer-mode)
   (add-hook 'racer-mode-hook #'eldoc-mode)
   (add-hook 'racer-mode-hook #'company-mode)
@@ -223,7 +229,7 @@
 #+END_SRC
 * EXTRA KEY BINDINGS
 ** fill width comment line break
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun comment-line-break (&optional arg)
   "Add dashed line break comment"
   (interactive "*P")
@@ -236,7 +242,7 @@
 (global-set-key (kbd "C-M-;") `comment-line-break)
 #+END_SRC
 ** fill width comment box
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun bjm-comment-box (b e)
   "draw a box comment around the region but arrange for the region to extend to at least the fill column.
 place the point after the comment box."
@@ -252,7 +258,7 @@ place the point after the comment box."
 (global-set-key (kbd "C-c b b") `bjm-comment-box)
 #+END_SRC
 ** helper used by move-text-* functions
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun move-text-internal (arg)
   (cond
    ((and mark-active transient-mark-mode)
@@ -282,7 +288,7 @@ place the point after the comment box."
       (move-to-column column t)))))
 #+END_SRC
 ** move line down:  M-S-down
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun move-text-down (arg)
   "Move region (transient-mark-mode active) or current line
   arg lines down."
@@ -291,7 +297,7 @@ place the point after the comment box."
 (global-set-key [M-S-down] 'move-text-down)
 #+END_SRC
 ** move line up: M-S-up
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (defun move-text-up (arg)
   "Move region (transient-mark-mode active) or current line
   arg lines up."
@@ -301,7 +307,7 @@ place the point after the comment box."
 #+END_SRC
 * ORG MODE SETTINGS
 ** enable org mode and make org mode work with files ending in .org
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   ;; Enable Org mode
   (require 'org)
   ;; Make Org mode work with files ending in .org
@@ -316,14 +322,14 @@ place the point after the comment box."
   (setq org-src-tab-acts-natively t)
 #+END_SRC
 ** set directories for org agenda
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq org-agenda-files (append
 			(file-expand-wildcards "~/org/gtd/gtd.org")
 			(file-expand-wildcards "~/org/gtd/inbox.org")
 			(file-expand-wildcards "~/org/gtd/tickler.org")))
 #+END_SRC
 ** setup org capture templates for gtd
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq org-capture-templates '(("t" "Todo [inbox]" entry
                                (file+headline "~/org/gtd/inbox.org" "Tasks")
                                "* TODO %i%?")
@@ -332,17 +338,17 @@ place the point after the comment box."
                                "* %i%? \n %U")))
 #+END_SRC
 ** setup org refile targets
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq org-refile-targets '(("~/org/gtd/gtd.org" :maxlevel . 3)
 			   ("~/org/gtd/someday.org" :level . 1)
 			   ("~/org/gtd/tickler.org" :maxlevel . 2)))
 #+END_SRC
 ** setup org todo keywords
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
 #+END_SRC
 ** setup custom org agenda commands
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (setq org-agenda-custom-commands 
 	'(("w" "At Work" tags-todo "@work" ((org-agenda-overriding-header "Work")
 	    (org-agenda-skip-function #'my-org-agenda-skip-all-siblings-but-first)))
@@ -369,17 +375,17 @@ place the point after the comment box."
     (string= "TODO" (org-get-todo-state)))
 #+END_SRC
 ** export html setup
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (setq org-html-htmlize-output-type 'css)
 #+END_SRC
 ** twitter bootstrap
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   ;; (require 'ox-twbs)
   (use-package ox-twbs
     :ensure t)
 #+END_SRC
 ** enable export of latex
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (require 'ox-latex)			;manually saved to elpa folder
   (unless (boundp 'org-latex-classes)
     (setq org-latex-classes nil))
@@ -421,13 +427,13 @@ place the point after the comment box."
   (put 'downcase-region 'disabled nil)
 #+END_SRC
 ** setup org-mode key bindings
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (global-set-key (kbd "C-c l") 'org-store-link)
   (global-set-key (kbd "C-c a") 'org-agenda)
   (global-set-key (kbd "C-c c") 'org-capture)
 #+END_SRC
 ** setup plantuml
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package plantuml-mode
     :ensure t)
   (setq plantuml-default-exec-mode 'jar)
@@ -448,10 +454,10 @@ place the point after the comment box."
 #+END_SRC
 ** setup reveal (for html presentations)
 #+begin_src emacs-lisp
-  (add-to-list 'load-path "~/org/lib/org-reveal/")
-  (require 'ox-reveal) 			;manually installed
-  ;; (use-package org-reveal
-  ;;   :ensure t)
+  ;; (add-to-list 'load-path "~/org/lib/org-reveal/")
+  ;; (require 'ox-reveal) 			;manually installed
+  ;; ;; (use-package org-reveal
+  ;; ;;   :ensure t)
 #+end_src
 ** setup org-roam repository and configurations
 #+begin_src emacs-lisp :lexical t

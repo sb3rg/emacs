@@ -10,7 +10,8 @@
             )
       )
 
-(load-theme 'gruvbox-dark-medium t) 	;don't place within custom variables (below)
+(when (require 'gruvbox-theme nil 'noerror)
+  (load-theme 'gruvbox-dark-medium t)) 	;don't place within custom variables (below)
 ;; --------------------------------------------------
 ;; Setup custom variables
 ;; --------------------------------------------------
@@ -34,6 +35,9 @@
    (quote
     (ox-twbs htmlize yaml-mode ess poly-R r-autoyas python paredit geiser multi-term gruvbox-theme exwm alchemist))) ;twilight-anti-bright-theme
  '(tool-bar-mode nil))
+
+(use-package gruvbox-theme
+  :ensure t)
 
 (use-package vertico
   :ensure t
@@ -63,8 +67,8 @@
   :ensure t
   :bind (("C-h F" . helpful-function)))
 
-(use-package magit
-  :ensure t)
+;; (use-package magit
+;;   :ensure t)
 
 ;; (use-package company
 ;;   :ensure t)
@@ -348,10 +352,10 @@ place the point after the comment box."
    '(;; other Babel languages
      (plantuml . t))))
 
-(add-to-list 'load-path "~/org/lib/org-reveal/")
-(require 'ox-reveal) 			;manually installed
-;; (use-package org-reveal
-;;   :ensure t)
+;; (add-to-list 'load-path "~/org/lib/org-reveal/")
+;; (require 'ox-reveal) 			;manually installed
+;; ;; (use-package org-reveal
+;; ;;   :ensure t)
 
 ;; dependencies for org-roam
 (use-package emacsql-sqlite3
