@@ -3,13 +3,13 @@
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
 (("org-capture-last-stored"
- (filename . "~/org-roam/Inbox.org")
- (front-context-string . "* TODO listen to")
- (rear-context-string . "\n#+title: Inbox\n")
- (position . 83))
+ (filename . "~/org-roam/daily/2022-04-06.org")
+ (front-context-string . "* 05:06 PM: Meet")
+ (rear-context-string . "tle: 2022-04-06\n")
+ (position . 88))
 ("org-refile-last-stored"
- (filename . "~/org-roam/daily/2022-04-12.org")
- (front-context-string . "** DONE Test inb")
- (rear-context-string . "ed note\n* Tasks\n")
- (position . 341))
+ (filename . "~/org-roam/daily/2022-04-20.org")
+ (front-context-string . "** DONE This is ")
+ (rear-context-string . "4-20 Wed 16:21]\n")
+ (position . 869))
 )

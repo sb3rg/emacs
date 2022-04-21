@@ -461,7 +461,9 @@ place the point after the comment box."
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; BEGIN HELPER FUNCTIONS                                               ;;
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; -*- lexical-binding: t; -*-
+  ;; --------------------------------------------------
+  ;; insert topic node immediately without opening buffer
+  ;; --------------------------------------------------
   (defun org-roam-node-insert-immediate (arg &rest args)
     (interactive "P")
     (let ((args (push arg args))
@@ -474,7 +476,7 @@ place the point after the comment box."
   (defun my/org-roam-capture-inbox ()
     (interactive)
     (org-roam-capture- :node (org-roam-node-create)
-		       :templates '(("i" "inbox" plain "* %?"
+		       :templates '(("i" "inbox" plain "** %?"
 				     :if-new (file+head "Inbox.org" "#+title: Inbox\n")))))
   ;; --------------------------------------------------
   ;; build org agenda from org-roam notes
@@ -516,8 +518,8 @@ place the point after the comment box."
        (member "Project" (org-roam-node-tags node)))
      ;; (my/org-roam-filter-by-tag "Project")
      :templates
-     '(("p" "project" plain "* Goals\n\n%?\n\n* Tasks\n\n** TODO Add initial tasks\n\n* Dates\n\n"
-	:if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: Project")
+     '(("p" "project" plain (file "~/org-roam/templates/ProjectTemplate.org")
+	:if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+category: \n#+filetags: Project\n#+date: %U\n")
 	:unnarrowed t))))
   ;; --------------------------------------------------
   ;; capture tasks directly into a specific project
@@ -533,9 +535,9 @@ place the point after the comment box."
 			      (lambda (node)
 				(member "Project" (org-roam-node-tags node))))
 		       ;; (my/org-roam-filter-by-tag "Project"))
-		       :templates '(("p" "project" plain "* TODO %?"
+		       :templates '(("p" "project" plain "** TODO %?"
 				     :if-new (file+head+olp "%<%Y%m%d%H%M%S>-${slug}.org"
-							    "#+title: ${title}\n#+filetags: Project"
+							    "#+title: ${title}\n#+category: \n#+filetags: Project\n#+date: %U\n"
 							    ("Tasks"))))))
   ;; --------------------------------------------------
   ;; automatically copy completed tasks to dailies
@@ -545,7 +547,7 @@ place the point after the comment box."
     (let ((org-refile-keep t) ;; Set this to nil to delete the original!
 	  (org-roam-dailies-capture-templates
 	   '(("t" "tasks" entry "%?"
-	      :if-new (file+head+olp "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n" ("Tasks")))))
+	      :if-new (file+head+olp "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n" ("Accomplishments")))))
 	  (org-after-refile-insert-hook #'save-buffer)
 	  today-file
 	  pos)
@@ -556,7 +558,7 @@ place the point after the comment box."
       ;; Only refile if the target file is different than the current file
       (unless (equal (file-truename today-file)
 		     (file-truename (buffer-file-name)))
-	(org-refile nil nil (list "Tasks" today-file nil pos)))))
+	(org-refile nil nil (list "Accomplishments" today-file nil pos)))))
 
   (add-to-list 'org-after-todo-state-change-hook
 	       (lambda ()
@@ -592,6 +594,9 @@ place the point after the comment box."
 	(file "~/org-roam/templates/ProjectTemplate.org")
 	:if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+category: \n#+filetags: Project\n#+date: %U\n")
 	:unnarrowed t)))
+    (org-roam-dailies-capture-templates
+     '(("d" "default" entry "* %<%I:%M %p>: \n%?"
+	:if-new (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))))
     :bind (("C-c n l" . org-roam-buffer-toggle)
 	   ("C-c n f" . org-roam-node-find)
 	   ("C-c n i" . org-roam-node-insert)

@@ -3,13 +3,13 @@
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
 (("org-capture-last-stored"
- (filename . "~/org-roam/20220419170805-project_simpy.org")
- (front-context-string . "* Goals\nEvaluate")
- (rear-context-string . "letags: Project\n")
- (position . 114))
+ (filename . "~/org-roam/20220420174844-digital_twin_components.org")
+ (front-context-string)
+ (rear-context-string . "4-20 Wed 17:48]\n")
+ (position . 132))
 ("org-refile-last-stored"
- (filename . "~/org-roam/daily/2022-04-12.org")
- (front-context-string . "** DONE Test inb")
- (rear-context-string . "ed note\n* Tasks\n")
- (position . 341))
+ (filename . "~/org-roam/daily/2022-04-20.org")
+ (front-context-string . "** DONE This is ")
+ (rear-context-string . "4-20 Wed 16:21]\n")
+ (position . 869))
 )
