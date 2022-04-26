@@ -253,7 +253,7 @@ place the point after the comment box."
 ;; automatically tangle our config.org file when we save it
 (defun efs/org-babel-tangle-config ()
   (when (string-equal (buffer-file-name)
-		      (expand-file-name "~/.emacs.d/config.org"))
+		      (expand-file-name "~/.emacs.d/emacs.org"))
     ;; Dynamic scoping to the rescue
     (let ((org-confirm-babel-evaluate nil))
       (org-babel-tangle))))
@@ -341,14 +341,12 @@ place the point after the comment box."
   (org-babel-do-load-languages
    'org-babel-load-languages
    '(;; other Babel languages
-     (plantuml . t))))
-
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((emacs-lisp . t )
-   (python . t )
-   (java . t)
-   (js . t)))
+     (plantuml . t)
+     (emacs-lisp . t )
+     (python . t )
+     (java . t)
+     (js . t)))
+  (push '("conf-unix" . conf-unix) org-src-lang-modes))
 
 ;; (add-to-list 'load-path "~/org/lib/org-reveal/")
 ;; (require 'ox-reveal) 			;manually installed
