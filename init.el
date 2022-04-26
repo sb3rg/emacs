@@ -45,10 +45,6 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
-;; custuomize theme
-(when (require 'gruvbox-theme nil 'noerror)
-  (load-theme 'gruvbox-dark-medium t))
-
 (set-face-attribute 'default nil :family "DejaVu Sans Mono" :height runemacs/default-font-size)
 ;; Set the fixed pitch face
 (set-face-attribute 'fixed-pitch nil :family "DejaVu Sans Mono" :height runemacs/default-font-size)
@@ -57,32 +53,12 @@
 
 (setq backup-directory-alist `(("." . ,(expand-file-name "tmp/backups" user-emacs-directory))))
 
-;; ;; --------------------------------------------------
-;; ;; Setup custom variables
-;; ;; --------------------------------------------------
-;; (custom-set-variables
-;;  ;; custom-set-variables was added by Custom.
-;;  ;; If you edit it by hand, you could mess it up, so be careful.
-;;  ;; Your init file should contain only one such instance.
-;;  ;; If there is more than one, they won't work right.
-;;  '(blink-cursor-mode nil)
-;;  ;; '(custom-enabled-themes (quote (twilight-anti-bright)))
-;;  '(custom-enabled-themes (quote (gruvbox-dark-medium)))
-;;  '(custom-safe-themes
-;;    (quote
-;;     ("3c68f48ea735abe65899f489271d11cbebbe87da7483acf9935ea4502efd0117" "b25040da50ef56b81165676fdf1aecab6eb2c928fac8a1861c5e7295d2a8d4dd" "95db78d85e3c0e735da28af774dfa59308db832f84b8a2287586f5b4f21a7a5b" "e6d83e70d2955e374e821e6785cd661ec363091edf56a463d0018dc49fbc92dd" default)))
-;;  '(menu-bar-mode nil)
-;;  '(package-archives
-;;    (quote
-;;     (("gnu" . "http://elpa.gnu.org/packages/")
-;;      ("" . "https://stable.melpa.org/packages/"))))
-;;  '(package-selected-packages
-;;    (quote
-;;     (ox-twbs htmlize yaml-mode ess poly-R r-autoyas python paredit geiser multi-term gruvbox-theme exwm alchemist))) ;twilight-anti-bright-theme
-;;  '(tool-bar-mode nil))
-
 (use-package gruvbox-theme
   :ensure t)
+
+;; custuomize theme
+(when (require 'gruvbox-theme nil 'noerror)
+  (load-theme 'gruvbox-dark-medium t))
 
 (use-package vertico
   :ensure t
@@ -196,8 +172,7 @@
     (local-set-key (kbd "TAB") 'my-insert-tab-char)  
     )
 
-  (add-hook 'mystm-mode-hook 'my-tab-config)
-  )
+  (add-hook 'mystm-mode-hook 'my-tab-config))
 
 (add-hook 'rust-mode-hook #'racer-mode)
 (add-hook 'racer-mode-hook #'eldoc-mode)

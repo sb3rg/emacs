@@ -61,12 +61,6 @@
   (setq use-package-always-ensure t)
 #+end_src
 
-** Customize Theme
-#+begin_src emacs-lisp
-  ;; custuomize theme
-  (when (require 'gruvbox-theme nil 'noerror)
-    (load-theme 'gruvbox-dark-medium t))
-#+end_src
 ** Font Configurations
 #+begin_src emacs-lisp
   (set-face-attribute 'default nil :family "DejaVu Sans Mono" :height runemacs/default-font-size)
@@ -75,44 +69,26 @@
   ;; Set the variable pitch face
   (set-face-attribute 'variable-pitch nil :family "DejaVu Sans Mono" :height runemacs/default-font-size :weight 'regular )
 #+end_src
+
 ** Keep Folders Clean
 Send all suffixed tilde files to a pre-determined destination for future reference
 #+begin_src emacs-lisp
   (setq backup-directory-alist `(("." . ,(expand-file-name "tmp/backups" user-emacs-directory))))
 #+end_src
+
+
 * CUSTOM VARIABLES & USE-PACKAGE
-** setup custom variables
-#+begin_src emacs-lisp
-  ;; ;; --------------------------------------------------
-  ;; ;; Setup custom variables
-  ;; ;; --------------------------------------------------
-  ;; (custom-set-variables
-  ;;  ;; custom-set-variables was added by Custom.
-  ;;  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;;  ;; Your init file should contain only one such instance.
-  ;;  ;; If there is more than one, they won't work right.
-  ;;  '(blink-cursor-mode nil)
-  ;;  ;; '(custom-enabled-themes (quote (twilight-anti-bright)))
-  ;;  '(custom-enabled-themes (quote (gruvbox-dark-medium)))
-  ;;  '(custom-safe-themes
-  ;;    (quote
-  ;;     ("3c68f48ea735abe65899f489271d11cbebbe87da7483acf9935ea4502efd0117" "b25040da50ef56b81165676fdf1aecab6eb2c928fac8a1861c5e7295d2a8d4dd" "95db78d85e3c0e735da28af774dfa59308db832f84b8a2287586f5b4f21a7a5b" "e6d83e70d2955e374e821e6785cd661ec363091edf56a463d0018dc49fbc92dd" default)))
-  ;;  '(menu-bar-mode nil)
-  ;;  '(package-archives
-  ;;    (quote
-  ;;     (("gnu" . "http://elpa.gnu.org/packages/")
-  ;;      ("" . "https://stable.melpa.org/packages/"))))
-  ;;  '(package-selected-packages
-  ;;    (quote
-  ;;     (ox-twbs htmlize yaml-mode ess poly-R r-autoyas python paredit geiser multi-term gruvbox-theme exwm alchemist))) ;twilight-anti-bright-theme
-  ;;  '(tool-bar-mode nil))
-#+END_SRC
-** install theme
+** Install and Customize Theme
 #+begin_src emacs-lisp
   (use-package gruvbox-theme
     :ensure t)
+
+  ;; custuomize theme
+  (when (require 'gruvbox-theme nil 'noerror)
+    (load-theme 'gruvbox-dark-medium t))
 #+end_src
-** setup vertico mode
+
+** Setup Vertico Mode
 #+begin_src emacs-lisp
   (use-package vertico
     :ensure t
@@ -121,13 +97,15 @@ Send all suffixed tilde files to a pre-determined destination for future referen
     :init
     (vertico-mode))
 #+end_src
-** setup savehistory for vertico
+
+** Setup Savehistory for Vertico
 #+begin_src emacs-lisp
   (use-package savehist
     :init
     (savehist-mode))
 #+end_src
-** setup marginalia for vertico
+
+** Setup Marginalia for Vertico
 #+begin_src emacs-lisp
   (use-package marginalia
     :after vertico
@@ -139,8 +117,9 @@ Send all suffixed tilde files to a pre-determined destination for future referen
     (marginalia-mode))
 #+end_src
 
+
 * DEV TOOL PACKAGES
-** setup helpful (more helpful help menu for emacs)
+** Setup Helpful (more helpful help menu for emacs)
 #+begin_src emacs-lisp
   (use-package helpful
     :ensure t
@@ -148,17 +127,20 @@ Send all suffixed tilde files to a pre-determined destination for future referen
 	   ("C-h V" . helpful-variable)
 	   ("C-c C-d" . helpful-at-point)))
 #+end_src
-** setup magit
+
+** Setup Magit
 #+begin_src emacs-lisp
   ;; (use-package magit
   ;;   :ensure t)
 #+end_src
-** setup company (for text completion framework--inactive)
+
+** Setup Company (for text completion framework--inactive)
 #+begin_src emacs-lisp
   ;; (use-package company
   ;;   :ensure t)
 #+end_src
-** setup flycheck (on-the-fly syntax checking extension-inactive)
+
+** Setup Flycheck (on-the-fly syntax checking extension-inactive)
 #+begin_src emacs-lisp
   ;; (use-package flycheck
   ;;   :ensure t
@@ -166,7 +148,8 @@ Send all suffixed tilde files to a pre-determined destination for future referen
   ;; (use-package flycheck-rust
   ;;   :ensure t)
 #+end_src
-** language server LSP
+
+** Language Server LSP (for IDE-like smart linting-inactive)
 #+begin_src emacs-lisp
   ;; (use-package lsp-mode
   ;;   :ensure t
@@ -176,6 +159,7 @@ Send all suffixed tilde files to a pre-determined destination for future referen
   ;; :config
   ;; (lsp-enable-which-key-intergration t))
 #+end_src
+
 *** Java
 #+begin_src emacs-lisp
   ;; --- NOT SURE HOW TO PROPERLY SET THIS UP SO COMMENTING OUT
@@ -186,23 +170,28 @@ Send all suffixed tilde files to a pre-determined destination for future referen
   ;;   :config
   ;;   (add-hook 'java-mode-hook #'lsp))
 #+end_src
-** enable previewing http sites
+
+** Enable Previewing HTTP Sites
 #+begin_src emacs-lisp
   ;; (require 'simple-httpd)
   (use-package simple-httpd
     :ensure t)
 #+end_src
-** setup websocket
+
+** Setup Websocket
 #+begin_src emacs-lisp
   (use-package websocket
     :ensure t)
 #+end_src
-** structure templates for source block code
+
+** Structure Templates for Source Block Code
 #+begin_src emacs-lisp
   (require 'org-tempo)
   (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
 #+end_src
+
+
 * CUSTOM PACKAGES
 ** SimTalk Mode
 Tell emacs where your persona elisp lib directory is located
@@ -213,15 +202,18 @@ Best not to include ending ".el" or ".elc"
 #+begin_src emacs-lisp
   (load "stm-mode")
 #+END_SRC
+
+
 * CUSTOM LANGUAGE SETTINGS
-** elixir settings: require alchemist on start-up for elixir
+** Elixir Settings: require alchemist on start-up for elixir
 #+begin_src emacs-lisp
   ;; (add-to-list 'load-path "~/.emacs.d/vendor/alchemist.el/")
   (use-package alchemist
     :ensure t)
   ;; (require 'alchemist)
 #+END_SRC
-** erlang settings:
+
+** Erlang Settings:
 #+begin_src emacs-lisp
   ;; ;; add the location of the elisp files to the load-path
   ;; (setq load-path (cons  "/usr/lib/erlang/lib/tools-2.6.13/emacs"
@@ -234,27 +226,31 @@ Best not to include ending ".el" or ".elc"
   ;; ;; everything else 
   ;; (require 'erlang-start)
 #+END_SRC
-** R settings: set R as program for ess
+
+** R Settings: set R as program for ess
 #+begin_src emacs-lisp
   (setq inferior-ess-r-program "R")
   (add-hook 'ess-mode-hook
 	    (lambda () 
 	      (ess-toggle-underscore nil)))
 #+END_SRC
-** java settings
+
+** Java Settings
 #+begin_src emacs-lisp
   (add-hook 'java-mode-hook (lambda ()
 			      (setq c-basic-offset 2
 				    tab-width 2
 				    indent-tabs-mode t)))
 #+END_SRC
-** common lisp settings: sbcl
+
+** Common Lisp Settings: sbcl (inactive)
 #+begin_src emacs-lisp
   ;;(load (expand-file-name "~/quicklisp/slime-helper.el"))
   ;; Replace "sbcl" with the path to your implementation
   ;;(setq inferior-lisp-program "sbcl")
 #+END_SRC
-** simtalk: setup files ending in ".stm" to open in mystm-mode
+
+** Simtalk: setup files ending in ".stm" to open in mystm-mode
 #+begin_src emacs-lisp
   (add-to-list 'auto-mode-alist '("\\.stm\\'" . mystm-mode))
   (when (fboundp 'mystm-mode)
@@ -269,10 +265,10 @@ Best not to include ending ".el" or ".elc"
       (local-set-key (kbd "TAB") 'my-insert-tab-char)  
       )
 
-    (add-hook 'mystm-mode-hook 'my-tab-config)
-    )
+    (add-hook 'mystm-mode-hook 'my-tab-config))
 #+END_SRC
-** rust settings for racer
+
+** Rust Settings for racer
 #+begin_src emacs-lisp
   (add-hook 'rust-mode-hook #'racer-mode)
   (add-hook 'racer-mode-hook #'eldoc-mode)
@@ -283,8 +279,10 @@ Best not to include ending ".el" or ".elc"
   (define-key rust-mode-map(kbd "TAB") #'company-indent-or-complete-common)
   (setq company-tooltip-align-annotations t)
 #+END_SRC
+
+
 * EXTRA KEY BINDINGS
-** fill width comment line break
+** Fill Width Comment Line Break
 #+begin_src emacs-lisp
   (defun comment-line-break (&optional arg)
     "Add dashed line break comment"
@@ -297,7 +295,8 @@ Best not to include ending ".el" or ".elc"
   ;; (insert-char ? 20))
   (global-set-key (kbd "C-M-;") `comment-line-break)
 #+END_SRC
-** fill width comment box
+
+** Fill Width Comment Box
 #+begin_src emacs-lisp
   (defun bjm-comment-box (b e)
     "draw a box comment around the region but arrange for the region to extend to at least the fill column.
@@ -313,7 +312,8 @@ Best not to include ending ".el" or ".elc"
   ;; create comment box
   (global-set-key (kbd "C-c b b") `bjm-comment-box)
 #+END_SRC
-** helper used by move-text-* functions
+
+** Helper Used by move-text-* Functions
 #+begin_src emacs-lisp
   (defun move-text-internal (arg)
     (cond
@@ -343,7 +343,8 @@ Best not to include ending ".el" or ".elc"
 	  (forward-line -1))
 	(move-to-column column t)))))
 #+END_SRC
-** move line down:  M-S-down
+
+** Move Line Down:  M-S-down
 #+begin_src emacs-lisp
   (defun move-text-down (arg)
     "Move region (transient-mark-mode active) or current line
@@ -352,7 +353,8 @@ Best not to include ending ".el" or ".elc"
     (move-text-internal arg))
   (global-set-key [M-S-down] 'move-text-down)
 #+END_SRC
-** move line up: M-S-up
+
+** Move Line Up: M-S-up
 #+begin_src emacs-lisp
   (defun move-text-up (arg)
     "Move region (transient-mark-mode active) or current line
@@ -361,8 +363,10 @@ Best not to include ending ".el" or ".elc"
     (move-text-internal (- arg)))
   (global-set-key [M-S-up] 'move-text-up)
 #+END_SRC
+
+
 * ORG MODE SETTINGS
-** auto-tangle config files
+** Auto-Tangle Config Files on Save
 #+begin_src emacs-lisp
   ;; automatically tangle our config.org file when we save it
   (defun efs/org-babel-tangle-config ()
@@ -374,7 +378,8 @@ Best not to include ending ".el" or ".elc"
 
   (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
 #+end_src
-** enable org mode and make org mode work with files ending in .org
+
+** Enable Org-mode
 #+begin_src emacs-lisp
   ;; Enable Org mode
   (require 'org)
@@ -389,21 +394,25 @@ Best not to include ending ".el" or ".elc"
   ;; source code tab works on native language within src block
   (setq org-src-tab-acts-natively t)
 #+END_SRC
-** setup org todo keywords
+
+** Setup Org TODO Keywords
 #+begin_src emacs-lisp
   (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
 #+END_SRC
-** export html setup
+
+** Export HTML Setup
 #+begin_src emacs-lisp
   (setq org-html-htmlize-output-type 'css)
 #+END_SRC
-** twitter bootstrap
+
+** Twitter Bootstrap
 #+begin_src emacs-lisp
   ;; (require 'ox-twbs)
   (use-package ox-twbs
     :ensure t)
 #+END_SRC
-** enable export of latex
+
+** Enable Export of LaTeX
 #+begin_src emacs-lisp
   (require 'ox-latex)			;manually saved to elpa folder
   (unless (boundp 'org-latex-classes)
@@ -445,13 +454,15 @@ Best not to include ending ".el" or ".elc"
 		 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
   (put 'downcase-region 'disabled nil)
 #+END_SRC
-** setup org-mode key bindings
+
+** Setup Org-mode Key Bindings
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-c l") 'org-store-link)
   (global-set-key (kbd "C-c a") 'org-agenda)
   (global-set-key (kbd "C-c c") 'org-capture)
 #+END_SRC
-** setup plantuml
+
+** Setup Plantuml
 #+begin_src emacs-lisp
   (use-package plantuml-mode
     :ensure t)
@@ -471,7 +482,8 @@ Best not to include ending ".el" or ".elc"
      '(;; other Babel languages
        (plantuml . t))))
 #+END_SRC
-** configure babel languages
+
+** Configure Babel Languages
 #+begin_src emacs-lisp
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -480,14 +492,16 @@ Best not to include ending ".el" or ".elc"
      (java . t)
      (js . t)))
 #+end_src
-** setup reveal (for html presentations)
+
+** Setup Reveal.js (for html presentations)
 #+begin_src emacs-lisp
   ;; (add-to-list 'load-path "~/org/lib/org-reveal/")
   ;; (require 'ox-reveal) 			;manually installed
   ;; ;; (use-package org-reveal
   ;; ;;   :ensure t)
 #+end_src
-** setup org-roam repository and configurations
+
+** Setup Org-roam Repository and Configurations
 #+begin_src emacs-lisp :lexical t
   ;; dependencies for org-roam
   (use-package emacsql-sqlite3
