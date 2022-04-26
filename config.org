@@ -1,28 +1,34 @@
 #+STARTUP: overview
 #+TITLE: Sean's Emacs Settings
 #+CREATOR: Sean Bergstedt
+#+PROPERTY: header-args:emacs-lisp :tangle ~/.emacs.d/config.el :mkdirp yes
 
-* FRAME SETTINGS
+* DESKTOP SETTINGS
 ** Stop showing the welcome screen
 #+begin_src emacs-lisp
   (setq inhibit-startup-screen t)
 #+END_SRC
 ** Deactivate bell
 #+begin_src emacs-lisp
-(setq visible-bell 1)
+  (setq visible-bell 1)
 #+END_SRC
 ** Make sure line numbers appear in all text editing buffers
 #+begin_src emacs-lisp
-(global-linum-mode t)
+  (global-linum-mode t)
 #+END_SRC
 ** Setup starting frame dimensions
 #+begin_src emacs-lisp
-(setq initial-frame-alist '(
-            (top . 40) (left . 100)
-            (width . 128) (height . 40)
-            )
-      )
+  (setq initial-frame-alist '(
+			      (top . 40) (left . 100)
+			      (width . 128) (height . 40)
+			      )
+	)
 #+END_SRC
+** Keep Folders Clean
+Send all suffixed tilde files to a pre-determined destination for future reference
+#+begin_src emacs-lisp
+  (setq backup-directory-alist `(("." . ,(expand-file-name "tmp/backups" user-emacs-directory))))
+#+end_src
 * CUSTOM VARIABLES & USE-PACKAGE
 ** setup custom variables
 #+begin_src emacs-lisp
@@ -87,7 +93,7 @@
 * CUSTOM UI SETTINGS
 ** customize font size and style
 #+begin_src emacs-lisp
-(custom-set-faces
+  (custom-set-faces
    ;; '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 105 :width normal :foundry "outline" :family "DejaVu Sans Mono")))))
    '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 105 :width normal :foundry "outline" :family nil)))))
 #+END_SRC
@@ -96,7 +102,8 @@
 #+begin_src emacs-lisp
   (use-package helpful
     :ensure t
-    :bind (("C-h F" . helpful-function)))
+    :bind (("C-h F" . helpful-function)
+	   ("C-h V" . helpful-variable)))
 #+end_src
 ** setup magit
 #+begin_src emacs-lisp
@@ -146,6 +153,12 @@
 #+begin_src emacs-lisp
   (use-package websocket
     :ensure t)
+#+end_src
+** structure templates for source block code
+#+begin_src emacs-lisp
+  (require 'org-tempo)
+  (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
 #+end_src
 * CUSTOM PACKAGES
 ** SimTalk Mode
@@ -599,6 +612,10 @@ place the point after the comment box."
        ("p" "project" plain
 	(file "~/org-roam/templates/ProjectTemplate.org")
 	:if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+category: \n#+filetags: Project\n#+date: %U\n")
+	:unnarrowed t)
+       ("g" "graphic" plain
+	(file "~/org-roam/templates/Graphic.org" )
+	:if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
 	:unnarrowed t)))
     (org-roam-dailies-capture-templates
      '(("d" "default" entry "* %<%I:%M %p>: \n%?"
