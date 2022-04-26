@@ -4,26 +4,28 @@
 #+PROPERTY: header-args:emacs-lisp :tangle ~/.emacs.d/config.el :mkdirp yes
 
 * DESKTOP SETTINGS
-** Stop showing the welcome screen
+** Basic UI Settings
+# #+begin_src emacs-lisp
 #+begin_src emacs-lisp
+  ;; adjust thist for your system
+  (defvar runemacs/default-font-size 120)
+  ;; Stop showing the welcome screen
   (setq inhibit-startup-screen t)
-#+END_SRC
-** Deactivate bell
-#+begin_src emacs-lisp
+  ;; Deactivate bell
   (setq visible-bell 1)
-#+END_SRC
-** Make sure line numbers appear in all text editing buffers
-#+begin_src emacs-lisp
+  ;; make sure line numbers apear in all text editing buffers
   (global-linum-mode t)
-#+END_SRC
-** Setup starting frame dimensions
+  ;; setup starting frame dimensions
+  (setq initial-frame-alist '((top . 40) (left . 100) (width . 128) (height . 40)))
+#+end_src
+** Font Configurations
 #+begin_src emacs-lisp
-  (setq initial-frame-alist '(
-			      (top . 40) (left . 100)
-			      (width . 128) (height . 40)
-			      )
-	)
-#+END_SRC
+  (set-face-attribute 'default nil :family "DejaVu Sans Mono" :height runemacs/default-font-size)
+  ;; Set the fixed pitch face
+  (set-face-attribute 'fixed-pitch nil :family "DejaVu Sans Mono" :height runemacs/default-font-size)
+  ;; Set the variable pitch face
+  (set-face-attribute 'variable-pitch nil :family "DejaVu Sans Mono" :height runemacs/default-font-size :weight 'regular )
+#+end_src
 ** Keep Folders Clean
 Send all suffixed tilde files to a pre-determined destination for future reference
 #+begin_src emacs-lisp
@@ -90,21 +92,15 @@ Send all suffixed tilde files to a pre-determined destination for future referen
     (marginalia-mode))
 #+end_src
 
-* CUSTOM UI SETTINGS
-** customize font size and style
-#+begin_src emacs-lisp
-  (custom-set-faces
-   ;; '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 105 :width normal :foundry "outline" :family "DejaVu Sans Mono")))))
-   '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 105 :width normal :foundry "outline" :family nil)))))
-#+END_SRC
 * DEV TOOL PACKAGES
 ** setup helpful (more helpful help menu for emacs)
 #+begin_src emacs-lisp
   (use-package helpful
     :ensure t
     :bind (("C-h F" . helpful-function)
-	   ("C-h V" . helpful-variable)))
-#+end_src
+	   ("C-h V" . helpful-variable)
+	   ("C-c C-d" . helpful-at-point)))
+	   #+end_src
 ** setup magit
 #+begin_src emacs-lisp
   ;; (use-package magit
@@ -130,8 +126,8 @@ Send all suffixed tilde files to a pre-determined destination for future referen
   ;;   :commands (lsp lsp-deferred)
   ;;   :init
   ;;   (setq lsp-keymap-prefix "C-c l"))
-    ;; :config
-    ;; (lsp-enable-which-key-intergration t))
+  ;; :config
+  ;; (lsp-enable-which-key-intergration t))
 #+end_src
 *** Java
 #+begin_src emacs-lisp
@@ -319,6 +315,18 @@ place the point after the comment box."
 (global-set-key [M-S-up] 'move-text-up)
 #+END_SRC
 * ORG MODE SETTINGS
+** auto-tangle config files
+#+begin_src emacs-lisp
+  ;; automatically tangle our config.org file when we save it
+  (defun efs/org-babel-tangle-config ()
+    (when (string-equal (buffer-file-name)
+			(expand-file-name "~/.emacs.d/config.org"))
+      ;; Dynamic scoping to the rescue
+      (let ((org-confirm-babel-evaluate nil))
+	(org-babel-tangle))))
+
+  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
+#+end_src
 ** enable org mode and make org mode work with files ending in .org
 #+begin_src emacs-lisp
   ;; Enable Org mode
@@ -334,58 +342,9 @@ place the point after the comment box."
   ;; source code tab works on native language within src block
   (setq org-src-tab-acts-natively t)
 #+END_SRC
-** set directories for org agenda
-#+begin_src emacs-lisp
-(setq org-agenda-files (append
-			(file-expand-wildcards "~/org/gtd/gtd.org")
-			(file-expand-wildcards "~/org/gtd/inbox.org")
-			(file-expand-wildcards "~/org/gtd/tickler.org")))
-#+END_SRC
-** setup org capture templates for gtd
-#+begin_src emacs-lisp
-(setq org-capture-templates '(("t" "Todo [inbox]" entry
-                               (file+headline "~/org/gtd/inbox.org" "Tasks")
-                               "* TODO %i%?")
-                              ("T" "Tickler" entry
-                               (file+headline "~/org/gtd/tickler.org" "Tickler")
-                               "* %i%? \n %U")))
-#+END_SRC
-** setup org refile targets
-#+begin_src emacs-lisp
-(setq org-refile-targets '(("~/org/gtd/gtd.org" :maxlevel . 3)
-			   ("~/org/gtd/someday.org" :level . 1)
-			   ("~/org/gtd/tickler.org" :maxlevel . 2)))
-#+END_SRC
 ** setup org todo keywords
 #+begin_src emacs-lisp
 (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
-#+END_SRC
-** setup custom org agenda commands
-#+begin_src emacs-lisp
-  (setq org-agenda-custom-commands 
-	'(("w" "At Work" tags-todo "@work" ((org-agenda-overriding-header "Work")
-	    (org-agenda-skip-function #'my-org-agenda-skip-all-siblings-but-first)))
-	  ("h" "At Home" tags-todo "@home" ((org-agenda-overriding-header "Home")
-	    (org-agenda-skip-function #'my-org-agenda-skip-all-siblings-but-first)))
-	  ("r" "On the Road" tags-todo "@road" ((org-agenda-overriding-header "Road")
-	    (org-agenda-skip-function #'my-org-agenda-skip-all-siblings-but-first)))))
-
-  ;; HELPER FUNCTIONS
-  (defun my-org-agenda-skip-all-siblings-but-first ()
-    "Skip all but the first non-done entry."
-    (let (should-skip-entry)
-      (unless (org-current-is-todo)
-	(setq should-skip-entry t))
-      (save-excursion
-	(while (and (not should-skip-entry) (org-goto-sibling t))
-	  (when (org-current-is-todo)
-	    (setq should-skip-entry t))))
-      (when should-skip-entry
-	(or (outline-next-heading)
-	    (goto-char (point-max))))))
-
-  (defun org-current-is-todo ()
-    (string= "TODO" (org-get-todo-state)))
 #+END_SRC
 ** export html setup
 #+begin_src emacs-lisp
@@ -465,6 +424,15 @@ place the point after the comment box."
      '(;; other Babel languages
        (plantuml . t))))
 #+END_SRC
+** configure babel languages
+#+begin_src emacs-lisp
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t )
+     (python . t )
+     (java . t)
+     (js . t)))
+#+end_src
 ** setup reveal (for html presentations)
 #+begin_src emacs-lisp
   ;; (add-to-list 'load-path "~/org/lib/org-reveal/")
