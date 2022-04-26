@@ -1,14 +1,35 @@
 #+STARTUP: overview
 #+TITLE: Sean's Emacs Settings
+#+PROPERTY: header-args:emacs-lisp :tangle ~/.emacs.d/init.el :mkdirp yes
 #+CREATOR: Sean Bergstedt
-#+PROPERTY: header-args:emacs-lisp :tangle ~/.emacs.d/config.el :mkdirp yes
 
 * DESKTOP SETTINGS
+** HEADER INFO
+#+begin_src emacs-lisp
+  ;; NOTE: init.el is generated from config.org.  Edit that file in
+  ;; Emacs and init.el will automatically be generated!
+#+end_src
+
 ** Basic UI Settings
-# #+begin_src emacs-lisp
 #+begin_src emacs-lisp
   ;; adjust thist for your system
-  (defvar runemacs/default-font-size 120)
+  (defvar runemacs/default-font-size 125)
+  (defvar runemacs/default-variable-font-size 125)
+
+  ;; make frame transparency overridable
+  (defvar runemacs/frame-transparency '(90 . 90))
+
+  ;; The default is 800 kilobytes.  Measured in bytes.
+  (setq gc-cons-threshold (* 50 1000 1000))
+
+  (defun efs/display-startup-time ()
+    (message "Emacs loaded in %s with %d garbage collections."
+	     (format "%.2f seconds"
+		     (float-time
+		      (time-subtract after-init-time before-init-time)))
+	     gcs-done))
+  (add-hook 'emacs-startup-hook #'efs/display-startup-time)
+
   ;; Stop showing the welcome screen
   (setq inhibit-startup-screen t)
   ;; Deactivate bell
@@ -17,6 +38,32 @@
   (global-linum-mode t)
   ;; setup starting frame dimensions
   (setq initial-frame-alist '((top . 40) (left . 100) (width . 128) (height . 40)))
+  #+end_src
+  
+** Package Resources Setup
+#+begin_src emacs-lisp
+
+  (require 'package)
+  (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+			   ("org" . "https://orgmode.org/elpa/")
+			   ("melpa-stable" . "https://stable.melpa.org/packages/")))
+  (package-initialize)
+  (unless package-archive-contents
+    (package-refresh-contents))
+
+  ;; initialize use-package on non-Linux platforms
+  (unless (package-installed-p 'use-package)
+    (package-install 'use-package))
+
+  (require 'use-package)
+  (setq use-package-always-ensure t)
+#+end_src
+
+** Customize Theme
+#+begin_src emacs-lisp
+  ;; custuomize theme
+  (when (require 'gruvbox-theme nil 'noerror)
+    (load-theme 'gruvbox-dark-medium t))
 #+end_src
 ** Font Configurations
 #+begin_src emacs-lisp
@@ -34,8 +81,6 @@ Send all suffixed tilde files to a pre-determined destination for future referen
 * CUSTOM VARIABLES & USE-PACKAGE
 ** setup custom variables
 #+begin_src emacs-lisp
-  (when (require 'gruvbox-theme nil 'noerror)
-    (load-theme 'gruvbox-dark-medium t)) 	;don't place within custom variables (below)
   ;; --------------------------------------------------
   ;; Setup custom variables
   ;; --------------------------------------------------
@@ -100,7 +145,7 @@ Send all suffixed tilde files to a pre-determined destination for future referen
     :bind (("C-h F" . helpful-function)
 	   ("C-h V" . helpful-variable)
 	   ("C-c C-d" . helpful-at-point)))
-	   #+end_src
+#+end_src
 ** setup magit
 #+begin_src emacs-lisp
   ;; (use-package magit
@@ -158,13 +203,13 @@ Send all suffixed tilde files to a pre-determined destination for future referen
 #+end_src
 * CUSTOM PACKAGES
 ** SimTalk Mode
-   Tell emacs where your persona elisp lib directory is located
+Tell emacs where your persona elisp lib directory is located
 #+begin_src emacs-lisp
-(add-to-list `load-path "~/.emacs.d/lisp/")
+  (add-to-list `load-path "~/.emacs.d/lisp/")
 #+END_SRC
-   Best not to include ending ".el" or ".elc"
+Best not to include ending ".el" or ".elc"
 #+begin_src emacs-lisp
-(load "stm-mode")
+  (load "stm-mode")
 #+END_SRC
 * CUSTOM LANGUAGE SETTINGS
 ** elixir settings: require alchemist on start-up for elixir
@@ -176,54 +221,54 @@ Send all suffixed tilde files to a pre-determined destination for future referen
 #+END_SRC
 ** erlang settings:
 #+begin_src emacs-lisp
-;; ;; add the location of the elisp files to the load-path
-;; (setq load-path (cons  "/usr/lib/erlang/lib/tools-2.6.13/emacs"
-;;          load-path))
-;; ;; set the location of the man page hierarchy
-;; (setq erlang-root-dir "/usr/lib/erlang")
-;; ;; add the home of the erlang binaries to the exec-path
-;; (setq exec-path (cons "/usr/lib/bin" exec-path))
-;; ;; load and eval the erlang-start package to set up 
-;; ;; everything else 
-;; (require 'erlang-start)
+  ;; ;; add the location of the elisp files to the load-path
+  ;; (setq load-path (cons  "/usr/lib/erlang/lib/tools-2.6.13/emacs"
+  ;;          load-path))
+  ;; ;; set the location of the man page hierarchy
+  ;; (setq erlang-root-dir "/usr/lib/erlang")
+  ;; ;; add the home of the erlang binaries to the exec-path
+  ;; (setq exec-path (cons "/usr/lib/bin" exec-path))
+  ;; ;; load and eval the erlang-start package to set up 
+  ;; ;; everything else 
+  ;; (require 'erlang-start)
 #+END_SRC
 ** R settings: set R as program for ess
 #+begin_src emacs-lisp
-(setq inferior-ess-r-program "R")
-(add-hook 'ess-mode-hook
-          (lambda () 
-            (ess-toggle-underscore nil)))
+  (setq inferior-ess-r-program "R")
+  (add-hook 'ess-mode-hook
+	    (lambda () 
+	      (ess-toggle-underscore nil)))
 #+END_SRC
 ** java settings
 #+begin_src emacs-lisp
-(add-hook 'java-mode-hook (lambda ()
-			    (setq c-basic-offset 2
-				  tab-width 2
-				  indent-tabs-mode t)))
+  (add-hook 'java-mode-hook (lambda ()
+			      (setq c-basic-offset 2
+				    tab-width 2
+				    indent-tabs-mode t)))
 #+END_SRC
 ** common lisp settings: sbcl
 #+begin_src emacs-lisp
-;;(load (expand-file-name "~/quicklisp/slime-helper.el"))
-;; Replace "sbcl" with the path to your implementation
-;;(setq inferior-lisp-program "sbcl")
+  ;;(load (expand-file-name "~/quicklisp/slime-helper.el"))
+  ;; Replace "sbcl" with the path to your implementation
+  ;;(setq inferior-lisp-program "sbcl")
 #+END_SRC
 ** simtalk: setup files ending in ".stm" to open in mystm-mode
 #+begin_src emacs-lisp
-(add-to-list 'auto-mode-alist '("\\.stm\\'" . mystm-mode))
-(when (fboundp 'mystm-mode)
+  (add-to-list 'auto-mode-alist '("\\.stm\\'" . mystm-mode))
+  (when (fboundp 'mystm-mode)
 
-  (defun my-insert-tab-char ()
-    "Insert a tab char. (ASCII 9, \t)"
-    (interactive)
-    (insert "\t"))
+    (defun my-insert-tab-char ()
+      "Insert a tab char. (ASCII 9, \t)"
+      (interactive)
+      (insert "\t"))
 
-  (defun my-tab-config ()
-    ;; setup tab char behavior
-    (local-set-key (kbd "TAB") 'my-insert-tab-char)  
+    (defun my-tab-config ()
+      ;; setup tab char behavior
+      (local-set-key (kbd "TAB") 'my-insert-tab-char)  
+      )
+
+    (add-hook 'mystm-mode-hook 'my-tab-config)
     )
-  
-  (add-hook 'mystm-mode-hook 'my-tab-config)
-  )
 #+END_SRC
 ** rust settings for racer
 #+begin_src emacs-lisp
@@ -239,80 +284,80 @@ Send all suffixed tilde files to a pre-determined destination for future referen
 * EXTRA KEY BINDINGS
 ** fill width comment line break
 #+begin_src emacs-lisp
-(defun comment-line-break (&optional arg)
-  "Add dashed line break comment"
-  (interactive "*P")
-  (comment-normalize-vars)
-  (if (and (not (region-active-p)) (not (looking-at "[ \t]*$")))
-      (comment-or-uncomment-region (line-beginning-position) (line-end-position))
-    (comment-dwim arg))
-  (insert-char ?- 50))
+  (defun comment-line-break (&optional arg)
+    "Add dashed line break comment"
+    (interactive "*P")
+    (comment-normalize-vars)
+    (if (and (not (region-active-p)) (not (looking-at "[ \t]*$")))
+	(comment-or-uncomment-region (line-beginning-position) (line-end-position))
+      (comment-dwim arg))
+    (insert-char ?- 50))
   ;; (insert-char ? 20))
-(global-set-key (kbd "C-M-;") `comment-line-break)
+  (global-set-key (kbd "C-M-;") `comment-line-break)
 #+END_SRC
 ** fill width comment box
 #+begin_src emacs-lisp
-(defun bjm-comment-box (b e)
-  "draw a box comment around the region but arrange for the region to extend to at least the fill column.
-place the point after the comment box."
-  (interactive "r")
-  (let ((e (copy-marker e t)))
-    (goto-char b)
-    (end-of-line)
-    (insert-char ? (- fill-column (current-column)))
-    (comment-box b e 1)
-    (goto-char e)
-    (set-marker e nil)))
-;; create comment box
-(global-set-key (kbd "C-c b b") `bjm-comment-box)
+  (defun bjm-comment-box (b e)
+    "draw a box comment around the region but arrange for the region to extend to at least the fill column.
+  place the point after the comment box."
+    (interactive "r")
+    (let ((e (copy-marker e t)))
+      (goto-char b)
+      (end-of-line)
+      (insert-char ? (- fill-column (current-column)))
+      (comment-box b e 1)
+      (goto-char e)
+      (set-marker e nil)))
+  ;; create comment box
+  (global-set-key (kbd "C-c b b") `bjm-comment-box)
 #+END_SRC
 ** helper used by move-text-* functions
 #+begin_src emacs-lisp
-(defun move-text-internal (arg)
-  (cond
-   ((and mark-active transient-mark-mode)
-    (if (> (point) (mark))
-        (exchange-point-and-mark))
-    (let ((column (current-column))
-          (text (delete-and-extract-region (point) (mark))))
-      (forward-line arg)
-      (move-to-column column t)
-      (set-mark (point))
-      (insert text)
-      (exchange-point-and-mark)
-      (setq deactivate-mark nil)))
-   (t
-    (let ((column (current-column)))
-      (beginning-of-line)
-      (when (or (> arg 0) (not (bobp)))
-        (forward-line)
-        (when (or (< arg 0) (not (eobp)))
-          (transpose-lines arg)
-          (when (and (eval-when-compile
-                       '(and (>= emacs-major-version 24)
-                             (>= emacs-minor-version 3)))
-                     (< arg 0))
-            (forward-line -1)))
-        (forward-line -1))
-      (move-to-column column t)))))
+  (defun move-text-internal (arg)
+    (cond
+     ((and mark-active transient-mark-mode)
+      (if (> (point) (mark))
+	  (exchange-point-and-mark))
+      (let ((column (current-column))
+	    (text (delete-and-extract-region (point) (mark))))
+	(forward-line arg)
+	(move-to-column column t)
+	(set-mark (point))
+	(insert text)
+	(exchange-point-and-mark)
+	(setq deactivate-mark nil)))
+     (t
+      (let ((column (current-column)))
+	(beginning-of-line)
+	(when (or (> arg 0) (not (bobp)))
+	  (forward-line)
+	  (when (or (< arg 0) (not (eobp)))
+	    (transpose-lines arg)
+	    (when (and (eval-when-compile
+			 '(and (>= emacs-major-version 24)
+			       (>= emacs-minor-version 3)))
+		       (< arg 0))
+	      (forward-line -1)))
+	  (forward-line -1))
+	(move-to-column column t)))))
 #+END_SRC
 ** move line down:  M-S-down
 #+begin_src emacs-lisp
-(defun move-text-down (arg)
-  "Move region (transient-mark-mode active) or current line
-  arg lines down."
-  (interactive "*p")
-  (move-text-internal arg))
-(global-set-key [M-S-down] 'move-text-down)
+  (defun move-text-down (arg)
+    "Move region (transient-mark-mode active) or current line
+    arg lines down."
+    (interactive "*p")
+    (move-text-internal arg))
+  (global-set-key [M-S-down] 'move-text-down)
 #+END_SRC
 ** move line up: M-S-up
 #+begin_src emacs-lisp
-(defun move-text-up (arg)
-  "Move region (transient-mark-mode active) or current line
-  arg lines up."
-  (interactive "*p")
-  (move-text-internal (- arg)))
-(global-set-key [M-S-up] 'move-text-up)
+  (defun move-text-up (arg)
+    "Move region (transient-mark-mode active) or current line
+    arg lines up."
+    (interactive "*p")
+    (move-text-internal (- arg)))
+  (global-set-key [M-S-up] 'move-text-up)
 #+END_SRC
 * ORG MODE SETTINGS
 ** auto-tangle config files
@@ -344,11 +389,11 @@ place the point after the comment box."
 #+END_SRC
 ** setup org todo keywords
 #+begin_src emacs-lisp
-(setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
+  (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
 #+END_SRC
 ** export html setup
 #+begin_src emacs-lisp
-(setq org-html-htmlize-output-type 'css)
+  (setq org-html-htmlize-output-type 'css)
 #+END_SRC
 ** twitter bootstrap
 #+begin_src emacs-lisp
